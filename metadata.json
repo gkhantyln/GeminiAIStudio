@@ -1,0 +1,5 @@
+{
+  "name": "Face Swap AI",
+  "description": "An AI-powered application that seamlessly swaps faces between two uploaded images using the Gemini API.",
+  "requestFramePermissions": []
+}
