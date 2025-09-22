@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SwapIcon } from './icons/SwapIcon';
 import { JewelIcon } from './icons/JewelIcon';
@@ -9,6 +8,11 @@ import { BackgroundIcon } from './icons/BackgroundIcon';
 import { WandIcon } from './icons/WandIcon';
 import { TransferIcon } from './icons/TransferIcon';
 import { EraserIcon } from './icons/EraserIcon';
+import { ExpandIcon } from './icons/ExpandIcon';
+import { InteriorDesignerIcon } from './icons/InteriorDesignerIcon';
+import { HeadshotIcon } from './icons/HeadshotIcon';
+import { ProductIcon } from './icons/ProductIcon';
+
 
 export interface Tool {
     id: string;
@@ -49,6 +53,12 @@ const tools: Tool[] = [
         icon: <EraserIcon className="w-10 h-10 mb-4 text-indigo-400" />
     },
     {
+        id: 'magic-expand',
+        title: 'Sihirli Genişletme',
+        description: 'Fotoğraflarınızın sınırlarını yapay zeka ile genişletin.',
+        icon: <ExpandIcon className="w-10 h-10 mb-4 text-indigo-400" />
+    },
+    {
         id: 'outfit-changer',
         title: 'Kıyafet Değiştirici',
         description: 'Metin açıklamasıyla bir kişinin kıyafetini değiştirin.',
@@ -65,6 +75,24 @@ const tools: Tool[] = [
         title: 'Arka Plan Değiştirme',
         description: 'Bir özneyi yeni bir arka plana yerleştirin.',
         icon: <BackgroundIcon className="w-10 h-10 mb-4 text-indigo-400" />
+    },
+    {
+        id: 'interior-designer',
+        title: 'Yapay Zeka İç Mimar',
+        description: 'Odanızın fotoğrafını yükleyin ve yeniden dekore edin.',
+        icon: <InteriorDesignerIcon className="w-10 h-10 mb-4 text-indigo-400" />
+    },
+    {
+        id: 'headshot-generator',
+        title: 'Yapay Zeka Vesikalık',
+        description: 'Selfie\'lerinizden profesyonel vesikalık fotoğraflar oluşturun.',
+        icon: <HeadshotIcon className="w-10 h-10 mb-4 text-indigo-400" />
+    },
+    {
+        id: 'product-photographer',
+        title: 'Yapay Zeka Ürün Fotoğrafçısı',
+        description: 'Ürünleriniz için stüdyo kalitesinde fotoğraflar üretin.',
+        icon: <ProductIcon className="w-10 h-10 mb-4 text-indigo-400" />
     },
     {
         id: 'custom-edit',

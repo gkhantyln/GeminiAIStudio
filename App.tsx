@@ -11,6 +11,10 @@ import BackgroundSwapView from './views/BackgroundSwapView';
 import CustomEditView from './views/CustomEditView';
 import OutfitTransferView from './views/OutfitTransferView';
 import MagicEraserView from './views/MagicEraserView';
+import HeadshotGeneratorView from './views/HeadshotGeneratorView';
+import ProductPhotographerView from './views/ProductPhotographerView';
+import MagicExpandView from './views/MagicExpandView';
+import InteriorDesignerView from './views/InteriorDesignerView';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
@@ -31,12 +35,20 @@ const App: React.FC = () => {
         return <ColorizeView />;
       case 'magic-eraser':
         return <MagicEraserView />;
+      case 'magic-expand':
+        return <MagicExpandView />;
       case 'outfit-changer':
         return <OutfitChangeView />;
       case 'outfit-transfer':
         return <OutfitTransferView />;
       case 'background-swap':
         return <BackgroundSwapView />;
+      case 'interior-designer':
+        return <InteriorDesignerView />;
+      case 'headshot-generator':
+        return <HeadshotGeneratorView />;
+      case 'product-photographer':
+        return <ProductPhotographerView />;
       case 'custom-edit':
         return <CustomEditView />;
       default:

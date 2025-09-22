@@ -190,3 +190,63 @@ export const customEdit = async (imageBase64: string, userPrompt: string): Promi
     };
     return callGemini([imagePart, textPart]);
 };
+
+export const generateHeadshot = async (imageBase64: string, stylePrompt: string): Promise<string | null> => {
+    const imagePart = fileToGenerativePart(imageBase64);
+    const textPart = {
+        text: `**Task: AI Professional Headshot Generator.**
+        You are an expert portrait photographer. Your task is to convert the user's uploaded photo into a high-quality, professional headshot.
+        **Key Instructions:**
+        1.  **Preserve Likeness:** The generated headshot MUST retain the person's facial features and identity from the original photo. This is the most critical rule.
+        2.  **Apply Style:** Modify the clothing, background, and lighting according to the user's style prompt.
+        3.  **Professional Quality:** The final image should have professional studio lighting, a suitable background, and appropriate corporate or professional attire. The output should be photorealistic.
+        4.  **Do Not Alter Face:** Do not change the person's facial structure, expression, or features. Simply place their head and face onto a new, AI-generated professional body and background.
+        **User's style request:** "${stylePrompt}"`
+    };
+    return callGemini([imagePart, textPart]);
+};
+
+export const generateProductPhoto = async (productImageBase64: string, scenePrompt: string): Promise<string | null> => {
+    const imagePart = fileToGenerativePart(productImageBase64);
+    const textPart = {
+        text: `**Task: AI Product Photographer.**
+        You are an expert product photographer. Your task is to take the product from the user's image and place it into a new, photorealistic scene based on their description.
+        **Key Instructions:**
+        1.  **Isolate Product:** Perfectly identify and isolate the main product from the provided image, removing its original background.
+        2.  **Create New Scene:** Generate a new background and setting as described in the user's scene prompt.
+        3.  **Seamless Integration:** Place the isolated product into the new scene. You MUST adjust the lighting, shadows, and reflections on the product to perfectly match the new environment. The integration must be undetectable.
+        4.  **Professional Quality:** The final output should look like a high-budget, professional product advertisement photo.
+        **User's scene description:** "${scenePrompt}"`
+    };
+    return callGemini([imagePart, textPart]);
+};
+
+export const magicExpand = async (imageBase64: string, aspectRatio: string): Promise<string | null> => {
+    const imagePart = fileToGenerativePart(imageBase64);
+    const textPart = {
+        text: `**Task: AI Outpainting (Magic Expand).**
+        You are an expert in photorealistic image extension. Your task is to expand the provided image to a new aspect ratio while creating a seamless, believable continuation of the original scene.
+        **Key Instructions:**
+        1.  **Preserve Original:** The content of the original image must be perfectly preserved in the center of the new, expanded image. Do not alter it.
+        2.  **Expand Scene:** Intelligently fill the new areas around the original image. The generated content (outpainting) must logically and stylistically match the original photo's content, lighting, shadows, color grading, and texture.
+        3.  **Target Aspect Ratio:** The final output image MUST have an aspect ratio of **${aspectRatio}**.
+        4.  **Seamless Blending:** The transition between the original image and the newly generated areas must be completely seamless and undetectable.
+        The result should be a single, coherent, high-resolution photograph.`
+    };
+    return callGemini([imagePart, textPart]);
+};
+
+export const redesignInterior = async (roomImageBase64: string, designPrompt: string): Promise<string | null> => {
+    const imagePart = fileToGenerativePart(roomImageBase64);
+    const textPart = {
+        text: `**Task: AI Interior Designer.**
+        You are a professional interior designer. Your task is to redesign the room in the provided image based on the user's specific instructions.
+        **Key Instructions:**
+        1.  **Maintain Structure:** Preserve the fundamental architectural elements of the room, such as the position of windows, doors, and the overall room shape.
+        2.  **Apply Changes:** Modify the decor, furniture, wall colors, flooring, and lighting according to the user's design prompt.
+        3.  **Photorealistic Result:** The final image must be photorealistic and look like a real photograph of the redesigned room. The lighting and shadows of new or modified objects must be consistent with the room's environment.
+        4.  **Adhere to Prompt:** Strictly follow the user's instructions for the new design.
+        **User's design instructions:** "${designPrompt}"`
+    };
+    return callGemini([imagePart, textPart]);
+};
