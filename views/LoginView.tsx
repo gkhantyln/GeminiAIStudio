@@ -51,7 +51,22 @@ const LoginView: React.FC<LoginViewProps> = ({ onLogin }) => {
             Giriş Yap
           </button>
         </form>
-         <div className="mt-6 text-xs text-gray-500">
+
+        <div className="mt-8 text-center text-sm text-gray-400 space-y-4">
+            <div>
+                <p className="mb-2">Bu uygulama, görüntü düzenleme için <strong>gemini-2.5-flash-image-preview</strong> modelini kullanır. Güncel ücretlendirme ve kullanım limitleri için lütfen resmi Gemini fiyatlandırma sayfasını kontrol edin.</p>
+                <a href="https://ai.google.dev/pricing" target="_blank" rel="noopener noreferrer" className="font-semibold text-indigo-400 hover:underline">
+                    Güncel Fiyatlandırmayı Görüntüle &rarr;
+                </a>
+            </div>
+            <div>
+                 <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="font-semibold text-indigo-400 hover:underline">
+                    Gemini API Anahtarı Nasıl Alınır? &rarr;
+                </a>
+            </div>
+        </div>
+
+        <div className="mt-6 text-xs text-gray-500">
             <p>API Anahtarınız tarayıcınızda yerel olarak saklanır ve sunucularımıza gönderilmez.</p>
         </div>
       </div>
