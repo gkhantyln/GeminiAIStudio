@@ -10,6 +10,7 @@ import OutfitChangeView from './views/OutfitChangeView';
 import BackgroundSwapView from './views/BackgroundSwapView';
 import CustomEditView from './views/CustomEditView';
 import OutfitTransferView from './views/OutfitTransferView';
+import MagicEraserView from './views/MagicEraserView';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
@@ -28,6 +29,8 @@ const App: React.FC = () => {
         return <ImageEnhancerView />;
       case 'colorize-photo':
         return <ColorizeView />;
+      case 'magic-eraser':
+        return <MagicEraserView />;
       case 'outfit-changer':
         return <OutfitChangeView />;
       case 'outfit-transfer':

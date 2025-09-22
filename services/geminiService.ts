@@ -80,6 +80,24 @@ export const virtualTryOn = async (personImageBase64: string, itemImageBase64: s
     return callGemini([personPart, itemPart, textPart]);
 };
 
+export const magicErase = async (imageBase64: string, maskBase64: string): Promise<string | null> => {
+    const imagePart = fileToGenerativePart(imageBase64);
+    const maskPart = fileToGenerativePart(maskBase64);
+    const textPart = {
+        text: `**Task: Photorealistic Inpainting (Magic Erase).**
+        You will receive two images.
+        - Image 1 is the source image.
+        - Image 2 is a mask. The black areas in the mask indicate the parts of the source image that need to be removed and realistically filled.
+
+        **Objective:**
+        1. Identify the area in the source image that corresponds to the black mask.
+        2. Remove the content within that masked area.
+        3. Intelligently fill the removed area with a background that seamlessly matches the surrounding content, lighting, textures, and perspective of the source image.
+        4. The final result should be a single, photorealistic image where the removal is undetectable. Do not alter any part of the image outside the masked area.`
+    };
+    return callGemini([imagePart, maskPart, textPart]);
+};
+
 export const enhanceImage = async (imageBase64: string): Promise<string | null> => {
     const imagePart = fileToGenerativePart(imageBase64);
     const textPart = {

@@ -8,6 +8,7 @@ import { OutfitIcon } from './icons/OutfitIcon';
 import { BackgroundIcon } from './icons/BackgroundIcon';
 import { WandIcon } from './icons/WandIcon';
 import { TransferIcon } from './icons/TransferIcon';
+import { EraserIcon } from './icons/EraserIcon';
 
 export interface Tool {
     id: string;
@@ -40,6 +41,12 @@ const tools: Tool[] = [
         title: 'Fotoğraf Renklendirme',
         description: 'Siyah beyaz fotoğraflara canlı ve gerçekçi renkler ekleyin.',
         icon: <ColorizeIcon className="w-10 h-10 mb-4 text-indigo-400" />
+    },
+    {
+        id: 'magic-eraser',
+        title: 'Sihirli Silgi',
+        description: 'Fotoğraflarınızdaki istenmeyen nesneleri silin.',
+        icon: <EraserIcon className="w-10 h-10 mb-4 text-indigo-400" />
     },
     {
         id: 'outfit-changer',
