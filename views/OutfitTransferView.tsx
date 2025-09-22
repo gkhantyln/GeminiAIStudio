@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
@@ -60,7 +61,8 @@ const OutfitTransferView: React.FC = () => {
           label="Kıyafet Kaynağı" 
           description="Kıyafetin alınacağı fotoğraf."
           image={outfitImage} 
-          onImageUpload={setOutfitImage} 
+          onImageUpload={setOutfitImage}
+          enableUrlFetch={true}
         />
       </div>
 
