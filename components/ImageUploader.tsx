@@ -89,7 +89,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
        <p className="text-sm text-gray-400 text-center mb-2">{description}</p>
       <div 
         onClick={onAreaClick}
-        className={`relative group w-full h-80 bg-gray-800 border-2 border-dashed border-gray-600 rounded-xl flex items-center justify-center transition-all duration-300 ${!image ? 'cursor-pointer hover:border-indigo-500 hover:bg-gray-700' : ''}`}
+        className={`relative group w-full h-64 sm:h-80 bg-gray-800 border-2 border-dashed border-gray-600 rounded-xl flex items-center justify-center transition-all duration-300 ${!image ? 'cursor-pointer hover:border-indigo-500 hover:bg-gray-700' : ''}`}
       >
         <input 
           type="file" 

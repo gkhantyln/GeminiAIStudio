@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { SwapIcon } from './icons/SwapIcon';
 import { JewelIcon } from './icons/JewelIcon';
@@ -74,7 +75,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({ onSelectTool
     return (
         <div className="w-full max-w-5xl">
             <div className="text-center mb-12">
-                <h2 className="text-4xl font-extrabold text-white">Ne yapmak istersiniz?</h2>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Ne yapmak istersiniz?</h2>
                 <p className="mt-4 text-lg text-gray-400">Bir araç seçerek başlayın</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -82,7 +83,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({ onSelectTool
                     <div
                         key={tool.id}
                         onClick={() => onSelectTool(tool)}
-                        className="bg-gray-800/50 border border-gray-700 rounded-xl p-8 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:border-indigo-500 hover:bg-gray-800 hover:scale-105"
+                        className="bg-gray-800/50 border border-gray-700 rounded-xl p-6 sm:p-8 flex flex-col items-center text-center cursor-pointer transition-all duration-300 hover:border-indigo-500 hover:bg-gray-800 hover:scale-105"
                     >
                         {tool.icon}
                         <h3 className="text-xl font-semibold text-white mb-2">{tool.title}</h3>

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Spinner } from './Spinner';
 import { DownloadIcon } from './icons/DownloadIcon';
@@ -46,7 +47,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ swappedImage, load
           <div className="w-full max-w-lg">
             <img src={swappedImage} alt="AI Result" className="rounded-lg shadow-2xl w-full h-auto object-contain" />
           </div>
-          <div className="flex items-center gap-4 mt-2">
+          <div className="flex flex-wrap justify-center items-center gap-4 mt-2">
             <button
               onClick={handleDownload}
               className="inline-flex items-center justify-center px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500"
