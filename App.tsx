@@ -1,92 +1,51 @@
-
-import React, { useState, useCallback } from 'react';
-import { ImageUploader } from './components/ImageUploader';
-import { ResultDisplay } from './components/ResultDisplay';
+import React, { useState } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
-import { SwapButton } from './components/SwapButton';
-import { ArrowIcon } from './components/icons/ArrowIcon';
-import { swapFaces } from './services/geminiService';
+import { CategorySelector, Tool } from './components/CategorySelector';
+import FaceSwapView from './views/FaceSwapView';
+import VirtualTryOnView from './views/VirtualTryOnView';
+import ImageEnhancerView from './views/ImageEnhancerView';
+import ColorizeView from './views/ColorizeView';
+import OutfitChangeView from './views/OutfitChangeView';
+import BackgroundSwapView from './views/BackgroundSwapView';
+import CustomEditView from './views/CustomEditView';
 
 const App: React.FC = () => {
-  const [sourceImage, setSourceImage] = useState<string | null>(null);
-  const [targetImage, setTargetImage] = useState<string | null>(null);
-  const [swappedImage, setSwappedImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [activeTool, setActiveTool] = useState<Tool | null>(null);
 
-  const handleSwap = useCallback(async () => {
-    if (!sourceImage || !targetImage) {
-      setError('Please upload both a source and a target image.');
-      return;
+  const renderTool = () => {
+    if (!activeTool) {
+      return <CategorySelector onSelectTool={setActiveTool} />;
     }
 
-    setLoading(true);
-    setError(null);
-    setSwappedImage(null);
-
-    try {
-      const result = await swapFaces(sourceImage, targetImage);
-      if (result) {
-        setSwappedImage(`data:image/png;base64,${result}`);
-      } else {
-        setError('The AI could not process the images. Please try different ones.');
-      }
-    } catch (err) {
-      console.error(err);
-      setError(err instanceof Error ? err.message : 'An unknown error occurred.');
-    } finally {
-      setLoading(false);
+    switch (activeTool.id) {
+      case 'face-swap':
+        return <FaceSwapView />;
+      case 'virtual-try-on':
+        return <VirtualTryOnView />;
+      case 'image-enhancer':
+        return <ImageEnhancerView />;
+      case 'colorize-photo':
+        return <ColorizeView />;
+      case 'outfit-changer':
+        return <OutfitChangeView />;
+      case 'background-swap':
+        return <BackgroundSwapView />;
+      case 'custom-edit':
+        return <CustomEditView />;
+      default:
+        return <CategorySelector onSelectTool={setActiveTool} />;
     }
-  }, [sourceImage, targetImage]);
-  
-  const handleReset = () => {
-    setSourceImage(null);
-    setTargetImage(null);
-    setSwappedImage(null);
-    setError(null);
-    setLoading(false);
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans">
-      <Header />
+      <Header
+        title={activeTool ? activeTool.title : 'AI Image Studio'}
+        onBackClick={activeTool ? () => setActiveTool(null) : undefined}
+      />
       <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-8">
-        <div className="w-full max-w-5xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-center">
-            {/* Image Uploaders */}
-            <ImageUploader 
-              label="Source Image" 
-              description="The main photo. The face will be replaced here."
-              image={sourceImage} 
-              onImageUpload={setSourceImage} 
-            />
-            <div className="hidden lg:flex justify-center items-center">
-                <ArrowIcon className="w-16 h-16 text-slate-500 transform rotate-90 md:rotate-0" />
-            </div>
-            <ImageUploader 
-              label="Target Face" 
-              description="The face to swap into the source image."
-              image={targetImage} 
-              onImageUpload={setTargetImage} 
-            />
-          </div>
-
-          <div className="text-center my-8">
-            <SwapButton 
-              onClick={handleSwap} 
-              disabled={!sourceImage || !targetImage || loading} 
-              loading={loading}
-            />
-          </div>
-
-          <ResultDisplay
-            swappedImage={swappedImage}
-            loading={loading}
-            error={error}
-            onReset={handleReset}
-          />
-        </div>
+        {renderTool()}
       </main>
       <Footer />
     </div>

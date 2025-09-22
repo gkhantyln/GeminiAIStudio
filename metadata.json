@@ -1,5 +1,5 @@
 {
-  "name": "Face Swap AI",
-  "description": "An AI-powered application that seamlessly swaps faces between two uploaded images using the Gemini API.",
+  "name": "AI Image Studio",
+  "description": "A powerful AI application for a wide range of image editing tasks, including face swapping, virtual try-on, colorization, enhancement, and more, all powered by the Gemini API.",
   "requestFramePermissions": []
 }
