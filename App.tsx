@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { CategorySelector, Tool } from './components/CategorySelector';
@@ -15,9 +15,37 @@ import HeadshotGeneratorView from './views/HeadshotGeneratorView';
 import ProductPhotographerView from './views/ProductPhotographerView';
 import MagicExpandView from './views/MagicExpandView';
 import InteriorDesignerView from './views/InteriorDesignerView';
+import LoginView from './views/LoginView';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
+  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedApiKey = localStorage.getItem('gemini-api-key');
+    const storedUserId = localStorage.getItem('user-id');
+    if (storedApiKey && storedUserId) {
+      setApiKey(storedApiKey);
+      setUserId(storedUserId);
+    }
+  }, []);
+
+  const handleLogin = (newApiKey: string) => {
+    const newUserId = `User-${Math.random().toString(36).substring(2, 10)}`;
+    localStorage.setItem('gemini-api-key', newApiKey);
+    localStorage.setItem('user-id', newUserId);
+    setApiKey(newApiKey);
+    setUserId(newUserId);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('gemini-api-key');
+    localStorage.removeItem('user-id');
+    setApiKey(null);
+    setUserId(null);
+    setActiveTool(null);
+  };
 
   const renderTool = () => {
     if (!activeTool) {
@@ -55,12 +83,18 @@ const App: React.FC = () => {
         return <CategorySelector onSelectTool={setActiveTool} />;
     }
   };
+  
+  if (!apiKey) {
+    return <LoginView onLogin={handleLogin} />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans">
       <Header
         title={activeTool ? activeTool.title : 'AI Image Studio'}
         onBackClick={activeTool ? () => setActiveTool(null) : undefined}
+        userId={userId}
+        onLogout={handleLogout}
       />
       <main className="flex-grow flex flex-col items-center justify-center p-4 md:p-8">
         {renderTool()}

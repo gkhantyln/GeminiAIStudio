@@ -1,12 +1,15 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-const API_KEY = process.env.API_KEY;
+const getAiClient = () => {
+  const apiKey = localStorage.getItem('gemini-api-key');
+  if (!apiKey) {
+    // This case should ideally not be reached if the UI prevents calls without a key.
+    // Redirect to login or show a global error. For now, we'll throw.
+    throw new Error("API Anahtarı bulunamadı. Lütfen giriş yapın.");
+  }
+  return new GoogleGenAI({ apiKey });
+};
 
-if (!API_KEY) {
-  throw new Error("API_KEY environment variable is not set.");
-}
-
-const ai = new GoogleGenAI({ apiKey: API_KEY });
 const imageModel = 'gemini-2.5-flash-image-preview';
 
 const fileToGenerativePart = (base64Data: string) => {
@@ -26,6 +29,7 @@ const fileToGenerativePart = (base64Data: string) => {
 };
 
 const callGemini = async (parts: any[]): Promise<string | null> => {
+  const ai = getAiClient();
   try {
     const response = await ai.models.generateContent({
       model: imageModel,
@@ -41,9 +45,17 @@ const callGemini = async (parts: any[]): Promise<string | null> => {
       }
     }
     return null;
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error communicating with Gemini API:", error);
-    throw new Error("Failed to communicate with the Gemini API.");
+    if (error.message && error.message.includes('API key not valid')) {
+        // Here you could also trigger a logout
+        localStorage.removeItem('gemini-api-key');
+        localStorage.removeItem('user-id');
+        // A reload will force the user to the login screen.
+        window.location.reload();
+        throw new Error("API Anahtarınız geçerli değil. Lütfen tekrar giriş yapın.");
+    }
+    throw new Error("Gemini API ile iletişim kurulamadı.");
   }
 }
 
