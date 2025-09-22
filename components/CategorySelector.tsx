@@ -6,6 +6,7 @@ import { ColorizeIcon } from './icons/ColorizeIcon';
 import { OutfitIcon } from './icons/OutfitIcon';
 import { BackgroundIcon } from './icons/BackgroundIcon';
 import { WandIcon } from './icons/WandIcon';
+import { TransferIcon } from './icons/TransferIcon';
 
 export interface Tool {
     id: string;
@@ -44,6 +45,12 @@ const tools: Tool[] = [
         title: 'Kıyafet Değiştirici',
         description: 'Metin açıklamasıyla bir kişinin kıyafetini değiştirin.',
         icon: <OutfitIcon className="w-10 h-10 mb-4 text-indigo-400" />
+    },
+    {
+        id: 'outfit-transfer',
+        title: 'Kıyafet Aktarma',
+        description: 'Bir fotoğraftaki kıyafeti başka bir kişiye giydirin.',
+        icon: <TransferIcon className="w-10 h-10 mb-4 text-indigo-400" />
     },
     {
         id: 'background-swap',

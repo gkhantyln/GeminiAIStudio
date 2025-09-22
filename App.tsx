@@ -9,6 +9,7 @@ import ColorizeView from './views/ColorizeView';
 import OutfitChangeView from './views/OutfitChangeView';
 import BackgroundSwapView from './views/BackgroundSwapView';
 import CustomEditView from './views/CustomEditView';
+import OutfitTransferView from './views/OutfitTransferView';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
@@ -29,6 +30,8 @@ const App: React.FC = () => {
         return <ColorizeView />;
       case 'outfit-changer':
         return <OutfitChangeView />;
+      case 'outfit-transfer':
+        return <OutfitTransferView />;
       case 'background-swap':
         return <BackgroundSwapView />;
       case 'custom-edit':

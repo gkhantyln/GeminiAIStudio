@@ -113,6 +113,42 @@ export const changeOutfit = async (personImageBase64: string, outfitDescription:
     return callGemini([imagePart, textPart]);
 };
 
+export const transferOutfit = async (personImageBase64: string, outfitImageBase64: string, prompt: string): Promise<string | null> => {
+    const personPart = fileToGenerativePart(personImageBase64);
+    const outfitPart = fileToGenerativePart(outfitImageBase64);
+    const textPart = {
+        text: `**Critical Task: Photorealistic Outfit Transfer**
+
+You are an expert digital tailor. Your job is to take an outfit from one image (Outfit Source) and perfectly fit it onto a person in another image (Model). The result must be completely seamless and photorealistic.
+
+**Input Images:**
+- **Image 1 (Model):** The person who will wear the new outfit.
+- **Image 2 (Outfit Source):** The image containing the clothing to be transferred.
+
+**Non-Negotiable Rules for a Perfect Result:**
+
+1.  **Isolate & Adapt the Garment:**
+    - First, identify and isolate the main article(s) of clothing from the 'Outfit Source' image.
+    - Then, you MUST meticulously warp, reshape, and drape the isolated clothing to perfectly fit the 'Model's' exact body shape, posture, and pose. The clothing must follow the contours of their body, arms, and torso naturally.
+
+2.  **Flawless Lighting & Shadow Integration:**
+    - Analyze the lighting environment of the 'Model' image (light source direction, hardness, color).
+    - You MUST re-render the lighting and shadows on the transferred outfit to perfectly match this environment. The shadows cast by the new clothing must be consistent with the original image's lighting.
+
+3.  **Preserve Model & Background Integrity:**
+    - The 'Model's' face, hair, skin, and body proportions MUST remain **absolutely unchanged**.
+    - The background from the 'Model' image MUST also be perfectly preserved.
+
+4.  **Incorporate User Instructions (If Provided):**
+    - The user may provide specific instructions. You must follow them. For example, 'use only the jacket' or 'change the color to red'.
+    - **User's specific instructions:** "${prompt || 'No additional instructions.'}"
+
+**Final Output:** Produce a single, high-resolution image of the person from the 'Model' image wearing the new, perfectly fitted outfit. Do NOT output any text, commentary, or explanations. The final image should look like an authentic, unedited photograph.`
+    };
+    return callGemini([personPart, outfitPart, textPart]);
+};
+
+
 export const changeBackground = async (subjectImageBase64: string, backgroundImageBase64: string): Promise<string | null> => {
     const subjectPart = fileToGenerativePart(subjectImageBase64);
     const backgroundPart = fileToGenerativePart(backgroundImageBase64);
