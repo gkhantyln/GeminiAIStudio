@@ -262,3 +262,21 @@ export const redesignInterior = async (roomImageBase64: string, designPrompt: st
     };
     return callGemini([imagePart, textPart]);
 };
+
+export const mixImages = async (images: string[], prompt: string): Promise<string | null> => {
+  const imageParts = images.map(fileToGenerativePart);
+  const textPart = {
+    text: `**Critical Task: Photorealistic Image Combination**
+You will be given multiple images, each containing one or more subjects, and a text prompt describing a scene.
+**Objective:**
+1.  **Identify & Extract Subjects:** Accurately identify the primary person or subject from each of the input images.
+2.  **Create New Scene:** Construct a new, photorealistic scene based *exactly* on the user's text prompt.
+3.  **Seamless Integration:** Place all extracted subjects into the new scene. They should appear naturally together, interacting as if they were originally in the same photograph. For example, if the prompt describes a group photo, they should be posing for the camera.
+4.  **Harmonize Lighting & Style:** Ensure that the lighting, shadows, color grading, and perspective on all subjects are consistent with the new scene's environment. The final image must be coherent and believable.
+**Constraint:** Do not include backgrounds from the original images unless specified by the prompt. Focus on the subjects.
+**User's Scene Description:** "${prompt}"`,
+  };
+
+  const allParts = [...imageParts, textPart];
+  return callGemini(allParts);
+};

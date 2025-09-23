@@ -12,6 +12,7 @@ import { ExpandIcon } from './icons/ExpandIcon';
 import { InteriorDesignerIcon } from './icons/InteriorDesignerIcon';
 import { HeadshotIcon } from './icons/HeadshotIcon';
 import { ProductIcon } from './icons/ProductIcon';
+import { MixerIcon } from './icons/MixerIcon';
 
 
 export interface Tool {
@@ -27,6 +28,12 @@ const tools: Tool[] = [
         title: 'Yüz Değiştirme',
         description: 'İki görüntü arasında yüzleri sorunsuzca değiştirin.',
         icon: <SwapIcon className="w-10 h-10 mb-4 text-indigo-400" />
+    },
+    {
+        id: 'image-mixer',
+        title: 'Fotoğraf Birleştirici',
+        description: 'Birden fazla fotoğrafı birleştirerek yeni bir sahne oluşturun.',
+        icon: <MixerIcon className="w-10 h-10 mb-4 text-indigo-400" />
     },
     {
         id: 'virtual-try-on',
@@ -114,7 +121,7 @@ export const CategorySelector: React.FC<CategorySelectorProps> = ({ onSelectTool
                 <p className="mt-4 text-lg text-gray-400">Bir araç seçerek başlayın</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                {tools.map((tool) => (
+                {tools.sort((a, b) => a.title.localeCompare(b.title)).map((tool) => (
                     <div
                         key={tool.id}
                         onClick={() => onSelectTool(tool)}

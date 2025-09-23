@@ -16,6 +16,7 @@ import ProductPhotographerView from './views/ProductPhotographerView';
 import MagicExpandView from './views/MagicExpandView';
 import InteriorDesignerView from './views/InteriorDesignerView';
 import LoginView from './views/LoginView';
+import ImageMixerView from './views/ImageMixerView';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
@@ -79,6 +80,8 @@ const App: React.FC = () => {
         return <ProductPhotographerView />;
       case 'custom-edit':
         return <CustomEditView />;
+      case 'image-mixer':
+        return <ImageMixerView />;
       default:
         return <CategorySelector onSelectTool={setActiveTool} />;
     }
