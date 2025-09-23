@@ -1,9 +1,11 @@
+
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
 import { ExpandIcon } from '../components/icons/ExpandIcon';
 import { magicExpand } from '../services/geminiService';
 import { Spinner } from '../components/Spinner';
+import { useTranslation } from '../context/LanguageContext';
 
 const MagicExpandView: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -11,10 +13,11 @@ const MagicExpandView: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [targetRatio, setTargetRatio] = useState<string>('');
+  const { t } = useTranslation();
 
   const handleAction = useCallback(async (ratio: string) => {
     if (!image) {
-      setError('Lütfen genişletilecek bir resim yükleyin.');
+      setError(t('views.magicExpand.error'));
       return;
     }
 
@@ -28,16 +31,23 @@ const MagicExpandView: React.FC = () => {
       if (result) {
         setResultImage(`data:image/png;base64,${result}`);
       } else {
-        setError('Yapay zeka resmi genişletemedi. Lütfen farklı bir resim deneyin.');
+        setError(t('errors.gemini.expandFailed'));
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+      if (errorMessage.includes('API Key not valid')) {
+        setError(t('errors.gemini.apiKeyInvalid'));
+      } else if (errorMessage.includes('API Key not found')) {
+        setError(t('errors.gemini.apiKeyMissing'));
+      } else {
+        setError(t('errors.gemini.generic'));
+      }
     } finally {
       setLoading(false);
       setTargetRatio('');
     }
-  }, [image]);
+  }, [image, t]);
   
   const handleReset = () => {
     setImage(null);
@@ -50,18 +60,17 @@ const MagicExpandView: React.FC = () => {
   return (
     <div className="w-full max-w-xl">
         <ImageUploader 
-            label="Görüntü Yükle" 
-            description="Sınırlarını genişletmek istediğiniz görüntüyü seçin."
+            label={t('views.magicExpand.uploadLabel')} 
+            description={t('views.magicExpand.uploadDescription')}
             image={image} 
             onImageUpload={setImage} 
         />
         
         {image && !resultImage && (
              <div className="my-8">
-                <p className="text-xl font-semibold text-white text-center mb-4">Hedef Boyut Oranını Seçin</p>
+                <p className="text-xl font-semibold text-white text-center mb-4">{t('views.magicExpand.targetRatio')}</p>
                 <div className="flex flex-wrap justify-center gap-4">
-                    {['16:9 (Yatay)', '9:16 (Dikey)', '4:3 (Yatay)', '1:1 (Kare)'].map(ratioStr => {
-                        const ratio = ratioStr.split(' ')[0];
+                    {['16:9', '9:16', '4:3', '1:1'].map(ratio => {
                         const isLoadingThis = loading && targetRatio === ratio;
                         return (
                             <button
@@ -71,7 +80,7 @@ const MagicExpandView: React.FC = () => {
                                 className="inline-flex items-center justify-center px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500"
                             >
                                 {isLoadingThis ? <Spinner className="w-5 h-5 mr-2" /> : <ExpandIcon className="w-5 h-5 mr-2" />}
-                                {isLoadingThis ? 'Genişletiliyor...' : ratioStr}
+                                {isLoadingThis ? t('views.magicExpand.buttonLoadingText') : t(`views.magicExpand.ratio.${ratio}` as any)}
                             </button>
                         );
                     })}

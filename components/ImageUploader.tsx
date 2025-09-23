@@ -4,6 +4,7 @@ import { UploadIcon } from './icons/UploadIcon';
 import { TrashIcon } from './icons/TrashIcon';
 import { LinkIcon } from './icons/LinkIcon';
 import { Spinner } from './Spinner';
+import { useTranslation } from '../context/LanguageContext';
 
 interface ImageUploaderProps {
   label: string;
@@ -18,6 +19,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
   const [url, setUrl] = useState('');
   const [isFetchingUrl, setIsFetchingUrl] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -44,7 +46,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
 
   const handleFetchUrl = async () => {
     if (!url.startsWith('http')) {
-        setFetchError('Lütfen geçerli bir URL girin.');
+        setFetchError(t('imageUploader.error.invalidUrl'));
         return;
     }
     setIsFetchingUrl(true);
@@ -52,16 +54,16 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
     try {
       const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
       const response = await fetch(proxyUrl);
-      if (!response.ok) throw new Error(`Sayfa alınamadı. (Durum: ${response.status})`);
+      if (!response.ok) throw new Error(t('imageUploader.error.fetchPage', { status: response.status }));
       const html = await response.text();
 
       const ogImageMatch = html.match(/<meta[^>]+property="og:image"[^>]+content="([^"]+)"/);
       const imageUrl = ogImageMatch?.[1];
-      if (!imageUrl) throw new Error('Bu sayfada bir ürün resmi bulunamadı.');
+      if (!imageUrl) throw new Error(t('imageUploader.error.noImage'));
 
       const imageProxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(imageUrl)}`;
       const imageResponse = await fetch(imageProxyUrl);
-      if (!imageResponse.ok) throw new Error(`Resim dosyası alınamadı. (Durum: ${imageResponse.status})`);
+      if (!imageResponse.ok) throw new Error(t('imageUploader.error.fetchImage', { status: imageResponse.status }));
       
       const blob = await imageResponse.blob();
       const reader = new FileReader();
@@ -70,13 +72,13 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
         setUrl('');
       };
       reader.onerror = () => {
-        throw new Error('Resim dosyası okunamadı.');
+        throw new Error(t('imageUploader.error.readImage'));
       };
       reader.readAsDataURL(blob);
 
     } catch (e: any) {
       console.error(e);
-      setFetchError(e.message || 'Bilinmeyen bir hata oluştu.');
+      setFetchError(e.message || t('imageUploader.error.unknown'));
     } finally {
       setIsFetchingUrl(false);
     }
@@ -104,7 +106,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
             <button 
                 onClick={handleRemoveImage}
                 className="absolute top-3 right-3 p-2 bg-red-600/80 hover:bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500"
-                aria-label="Remove image"
+                aria-label={t('imageUploader.removeImage')}
             >
                 <TrashIcon className="w-5 h-5" />
             </button>
@@ -112,8 +114,8 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
         ) : (
           <div className="text-center text-gray-400">
             <UploadIcon className="w-12 h-12 mx-auto mb-2"/>
-            <p className="font-semibold">Yüklemek için tıklayın</p>
-            <p className="text-xs">PNG, JPG veya WEBP</p>
+            <p className="font-semibold">{t('imageUploader.clickToUpload')}</p>
+            <p className="text-xs">{t('imageUploader.fileTypes')}</p>
           </div>
         )}
       </div>
@@ -121,7 +123,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
         <div className="w-full mt-4">
           <div className="relative flex items-center">
             <div className="flex-grow border-t border-gray-600"></div>
-            <span className="flex-shrink mx-4 text-gray-400 text-sm">veya URL'den al</span>
+            <span className="flex-shrink mx-4 text-gray-400 text-sm">{t('imageUploader.orFetch')}</span>
             <div className="flex-grow border-t border-gray-600"></div>
           </div>
           <div className="flex gap-2 mt-3">
@@ -129,7 +131,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
               type="url"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="Ürün linkini yapıştırın (örn: Trendyol)"
+              placeholder={t('imageUploader.urlPlaceholder')}
               className="flex-grow p-2 bg-gray-700 border-2 border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors"
               disabled={isFetchingUrl}
               aria-label="Product URL"
@@ -138,7 +140,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ label, description
               onClick={handleFetchUrl}
               disabled={!url || isFetchingUrl}
               className="flex-shrink-0 inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 disabled:bg-gray-600 disabled:cursor-not-allowed transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-500"
-              aria-label="Fetch image from URL"
+              aria-label={t('imageUploader.fetchImage')}
             >
               {isFetchingUrl ? <Spinner className="w-5 h-5" /> : <LinkIcon className="w-5 h-5" />}
             </button>

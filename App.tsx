@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
@@ -17,11 +18,13 @@ import MagicExpandView from './views/MagicExpandView';
 import InteriorDesignerView from './views/InteriorDesignerView';
 import LoginView from './views/LoginView';
 import ImageMixerView from './views/ImageMixerView';
+import { useTranslation } from './context/LanguageContext';
 
 const App: React.FC = () => {
   const [activeTool, setActiveTool] = useState<Tool | null>(null);
   const [apiKey, setApiKey] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const storedApiKey = localStorage.getItem('gemini-api-key');
@@ -46,6 +49,13 @@ const App: React.FC = () => {
     setApiKey(null);
     setUserId(null);
     setActiveTool(null);
+  };
+
+  const getHeaderTitle = () => {
+    if (activeTool) {
+      return t(`categorySelector.tools.${activeTool.id}.title`);
+    }
+    return 'AI Image Studio';
   };
 
   const renderTool = () => {
@@ -94,7 +104,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 flex flex-col font-sans">
       <Header
-        title={activeTool ? activeTool.title : 'AI Image Studio'}
+        title={getHeaderTitle()}
         onBackClick={activeTool ? () => setActiveTool(null) : undefined}
         userId={userId}
         onLogout={handleLogout}

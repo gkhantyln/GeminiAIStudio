@@ -5,6 +5,7 @@ import { ResultDisplay } from '../components/ResultDisplay';
 import { ActionButton } from '../components/ActionButton';
 import { TransferIcon } from '../components/icons/TransferIcon';
 import { transferOutfit } from '../services/geminiService';
+import { useTranslation } from '../context/LanguageContext';
 
 const OutfitTransferView: React.FC = () => {
   const [personImage, setPersonImage] = useState<string | null>(null);
@@ -13,10 +14,11 @@ const OutfitTransferView: React.FC = () => {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleAction = useCallback(async () => {
     if (!personImage || !outfitImage) {
-      setError('Lütfen hem model hem de kıyafet kaynağı resimlerini yükleyin.');
+      setError(t('views.outfitTransfer.error'));
       return;
     }
 
@@ -29,15 +31,22 @@ const OutfitTransferView: React.FC = () => {
       if (result) {
         setResultImage(`data:image/png;base64,${result}`);
       } else {
-        setError('Yapay zeka kıyafeti aktaramadı. Lütfen farklı görseller deneyin.');
+        setError(t('errors.gemini.outfitTransferFailed'));
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+      if (errorMessage.includes('API Key not valid')) {
+        setError(t('errors.gemini.apiKeyInvalid'));
+      } else if (errorMessage.includes('API Key not found')) {
+        setError(t('errors.gemini.apiKeyMissing'));
+      } else {
+        setError(t('errors.gemini.generic'));
+      }
     } finally {
       setLoading(false);
     }
-  }, [personImage, outfitImage, prompt]);
+  }, [personImage, outfitImage, prompt, t]);
   
   const handleReset = () => {
     setPersonImage(null);
@@ -52,14 +61,14 @@ const OutfitTransferView: React.FC = () => {
     <div className="w-full max-w-5xl">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         <ImageUploader 
-          label="Model" 
-          description="Yeni kıyafeti giyecek kişi."
+          label={t('views.outfitTransfer.modelLabel')} 
+          description={t('views.outfitTransfer.modelDescription')}
           image={personImage} 
           onImageUpload={setPersonImage} 
         />
         <ImageUploader 
-          label="Kıyafet Kaynağı" 
-          description="Kıyafetin alınacağı fotoğraf."
+          label={t('views.outfitTransfer.outfitLabel')} 
+          description={t('views.outfitTransfer.outfitDescription')}
           image={outfitImage} 
           onImageUpload={setOutfitImage}
           enableUrlFetch={true}
@@ -67,13 +76,13 @@ const OutfitTransferView: React.FC = () => {
       </div>
 
       <div className="w-full max-w-xl mx-auto mt-8">
-        <label htmlFor="prompt" className="block text-xl font-semibold text-white text-center mb-2">Ek Talimatlar (İsteğe Bağlı)</label>
-        <p className="text-sm text-gray-400 text-center mb-4">Örn: "sadece ceketi kullan" veya "rengini mavi yap".</p>
+        <label htmlFor="prompt" className="block text-xl font-semibold text-white text-center mb-2">{t('views.outfitTransfer.promptLabel')}</label>
+        <p className="text-sm text-gray-400 text-center mb-4">{t('views.outfitTransfer.promptDescription')}</p>
         <textarea
             id="prompt"
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Ekstra talimatlarınızı buraya yazın..."
+            placeholder={t('views.outfitTransfer.promptPlaceholder')}
             className="w-full h-24 p-4 bg-gray-800 border-2 border-gray-600 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors"
             disabled={loading}
         />
@@ -84,8 +93,8 @@ const OutfitTransferView: React.FC = () => {
           onClick={handleAction} 
           disabled={!personImage || !outfitImage || loading} 
           loading={loading}
-          text="Kıyafeti Aktar"
-          loadingText="Aktarılıyor..."
+          text={t('views.outfitTransfer.buttonText')}
+          loadingText={t('views.outfitTransfer.buttonLoadingText')}
           icon={<TransferIcon className="w-6 h-6 mr-3" />}
         />
       </div>

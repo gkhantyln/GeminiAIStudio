@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Modality } from "@google/genai";
 
 const getAiClient = () => {
@@ -5,7 +6,7 @@ const getAiClient = () => {
   if (!apiKey) {
     // This case should ideally not be reached if the UI prevents calls without a key.
     // Redirect to login or show a global error. For now, we'll throw.
-    throw new Error("API Anahtarı bulunamadı. Lütfen giriş yapın.");
+    throw new Error("API Key not found. Please log in.");
   }
   return new GoogleGenAI({ apiKey });
 };
@@ -53,9 +54,9 @@ const callGemini = async (parts: any[]): Promise<string | null> => {
         localStorage.removeItem('user-id');
         // A reload will force the user to the login screen.
         window.location.reload();
-        throw new Error("API Anahtarınız geçerli değil. Lütfen tekrar giriş yapın.");
+        throw new Error("Your API Key is not valid. Please log in again.");
     }
-    throw new Error("Gemini API ile iletişim kurulamadı.");
+    throw new Error("Could not communicate with the Gemini API.");
   }
 }
 

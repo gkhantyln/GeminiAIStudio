@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
@@ -5,6 +6,7 @@ import { ActionButton } from '../components/ActionButton';
 import { EraserIcon } from '../components/icons/EraserIcon';
 import { magicErase } from '../services/geminiService';
 import { TrashIcon } from '../components/icons/TrashIcon';
+import { useTranslation } from '../context/LanguageContext';
 
 const MagicEraserView: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -12,6 +14,7 @@ const MagicEraserView: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [brushSize, setBrushSize] = useState<number>(30);
+  const { t } = useTranslation();
 
   const imageCanvasRef = useRef<HTMLCanvasElement>(null);
   const maskCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -133,7 +136,7 @@ const MagicEraserView: React.FC = () => {
   
   const handleAction = useCallback(async () => {
     if (!image || !maskCanvasRef.current) {
-      setError('Lütfen bir resim yükleyin.');
+      setError(t('views.magicEraser.error'));
       return;
     }
     
@@ -158,16 +161,23 @@ const MagicEraserView: React.FC = () => {
             if (result) {
                 setResultImage(`data:image/png;base64,${result}`);
             } else {
-                setError('Yapay zeka nesneyi silemedi. Lütfen tekrar deneyin.');
+                setError(t('errors.gemini.eraseFailed'));
             }
         } catch (err) {
             console.error(err);
-            setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+            const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+            if (errorMessage.includes('API Key not valid')) {
+                setError(t('errors.gemini.apiKeyInvalid'));
+            } else if (errorMessage.includes('API Key not found')) {
+                setError(t('errors.gemini.apiKeyMissing'));
+            } else {
+                setError(t('errors.gemini.generic'));
+            }
         } finally {
             setLoading(false);
         }
     }
-  }, [image]);
+  }, [image, t]);
   
   const handleReset = () => {
     setImage(null);
@@ -181,8 +191,8 @@ const MagicEraserView: React.FC = () => {
     return (
         <div className="w-full max-w-xl">
              <ImageUploader 
-                label="Resim Yükle" 
-                description="Silmek istediğiniz nesnenin bulunduğu resmi yükleyin."
+                label={t('views.magicEraser.uploadLabel')}
+                description={t('views.magicEraser.uploadDescription')}
                 image={image} 
                 onImageUpload={setImage} 
             />
@@ -209,7 +219,7 @@ const MagicEraserView: React.FC = () => {
       
       <div className="w-full max-w-lg bg-gray-800/50 border border-gray-700 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-center gap-4 mb-6">
         <div className='flex items-center gap-2'>
-            <label htmlFor="brush-size" className="text-sm font-medium text-white whitespace-nowrap">Fırça Boyutu:</label>
+            <label htmlFor="brush-size" className="text-sm font-medium text-white whitespace-nowrap">{t('views.magicEraser.brushSize')}</label>
             <input 
                 id="brush-size"
                 type="range" 
@@ -225,7 +235,7 @@ const MagicEraserView: React.FC = () => {
             className="inline-flex items-center px-3 py-2 bg-gray-600 text-white text-sm font-semibold rounded-lg hover:bg-gray-500 transition-colors"
         >
             <TrashIcon className='w-4 h-4 mr-2'/>
-            Temizle
+            {t('views.magicEraser.clear')}
         </button>
       </div>
 
@@ -234,8 +244,8 @@ const MagicEraserView: React.FC = () => {
           onClick={handleAction} 
           disabled={loading}
           loading={loading}
-          text="Sil"
-          loadingText="Siliniyor..."
+          text={t('views.magicEraser.buttonText')}
+          loadingText={t('views.magicEraser.buttonLoadingText')}
           icon={<EraserIcon className="w-6 h-6 mr-3" />}
         />
       </div>

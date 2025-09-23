@@ -1,19 +1,22 @@
+
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
 import { ActionButton } from '../components/ActionButton';
 import { ColorizeIcon } from '../components/icons/ColorizeIcon';
 import { colorizeImage } from '../services/geminiService';
+import { useTranslation } from '../context/LanguageContext';
 
 const ColorizeView: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleAction = useCallback(async () => {
     if (!image) {
-      setError('Lütfen renklendirilecek bir görüntü yükleyin.');
+      setError(t('views.colorize.error'));
       return;
     }
 
@@ -26,15 +29,22 @@ const ColorizeView: React.FC = () => {
       if (result) {
         setResultImage(`data:image/png;base64,${result}`);
       } else {
-        setError('Yapay zeka görüntüyü işleyemedi. Lütfen farklı bir tane deneyin.');
+        setError(t('errors.gemini.processFailed'));
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+      if (errorMessage.includes('API Key not valid')) {
+        setError(t('errors.gemini.apiKeyInvalid'));
+      } else if (errorMessage.includes('API Key not found')) {
+        setError(t('errors.gemini.apiKeyMissing'));
+      } else {
+        setError(t('errors.gemini.generic'));
+      }
     } finally {
       setLoading(false);
     }
-  }, [image]);
+  }, [image, t]);
   
   const handleReset = () => {
     setImage(null);
@@ -46,8 +56,8 @@ const ColorizeView: React.FC = () => {
   return (
     <div className="w-full max-w-xl">
         <ImageUploader 
-            label="Siyah Beyaz Fotoğraf Yükle" 
-            description="Fotoğrafınıza gerçekçi renkler ekleyin."
+            label={t('views.colorize.label')} 
+            description={t('views.colorize.description')}
             image={image} 
             onImageUpload={setImage} 
         />
@@ -57,8 +67,8 @@ const ColorizeView: React.FC = () => {
               onClick={handleAction} 
               disabled={!image || loading} 
               loading={loading}
-              text="Renklendir"
-              loadingText="Renklendiriliyor..."
+              text={t('views.colorize.buttonText')}
+              loadingText={t('views.colorize.buttonLoadingText')}
               icon={<ColorizeIcon className="w-6 h-6 mr-3" />}
             />
         </div>

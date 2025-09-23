@@ -1,9 +1,11 @@
+
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
 import { ActionButton } from '../components/ActionButton';
 import { JewelIcon } from '../components/icons/JewelIcon';
 import { virtualTryOn } from '../services/geminiService';
+import { useTranslation } from '../context/LanguageContext';
 
 const VirtualTryOnView: React.FC = () => {
   const [personImage, setPersonImage] = useState<string | null>(null);
@@ -11,10 +13,11 @@ const VirtualTryOnView: React.FC = () => {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleAction = useCallback(async () => {
     if (!personImage || !itemImage) {
-      setError('Lütfen hem kişi hem de ürün resmini yükleyin.');
+      setError(t('views.virtualTryOn.error'));
       return;
     }
 
@@ -27,15 +30,22 @@ const VirtualTryOnView: React.FC = () => {
       if (result) {
         setResultImage(`data:image/png;base64,${result}`);
       } else {
-        setError('Yapay zeka görüntüleri işleyemedi. Lütfen farklı olanları deneyin.');
+        setError(t('errors.gemini.processFailed'));
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+      if (errorMessage.includes('API Key not valid')) {
+        setError(t('errors.gemini.apiKeyInvalid'));
+      } else if (errorMessage.includes('API Key not found')) {
+        setError(t('errors.gemini.apiKeyMissing'));
+      } else {
+        setError(t('errors.gemini.generic'));
+      }
     } finally {
       setLoading(false);
     }
-  }, [personImage, itemImage]);
+  }, [personImage, itemImage, t]);
   
   const handleReset = () => {
     setPersonImage(null);
@@ -49,14 +59,14 @@ const VirtualTryOnView: React.FC = () => {
     <div className="w-full max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <ImageUploader 
-              label="Kişi" 
-              description="Ürünün deneneceği kişi."
+              label={t('views.virtualTryOn.personLabel')} 
+              description={t('views.virtualTryOn.personDescription')}
               image={personImage} 
               onImageUpload={setPersonImage} 
             />
             <ImageUploader 
-              label="Ürün" 
-              description="Takı, gözlük, şapka vb."
+              label={t('views.virtualTryOn.itemLabel')} 
+              description={t('views.virtualTryOn.itemDescription')}
               image={itemImage} 
               onImageUpload={setItemImage} 
             />
@@ -67,8 +77,8 @@ const VirtualTryOnView: React.FC = () => {
               onClick={handleAction} 
               disabled={!personImage || !itemImage || loading} 
               loading={loading}
-              text="Sanal Dene"
-              loadingText="Deneniyor..."
+              text={t('views.virtualTryOn.buttonText')}
+              loadingText={t('views.virtualTryOn.buttonLoadingText')}
               icon={<JewelIcon className="w-6 h-6 mr-3" />}
             />
         </div>

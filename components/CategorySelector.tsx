@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { SwapIcon } from './icons/SwapIcon';
 import { JewelIcon } from './icons/JewelIcon';
@@ -13,7 +14,7 @@ import { InteriorDesignerIcon } from './icons/InteriorDesignerIcon';
 import { HeadshotIcon } from './icons/HeadshotIcon';
 import { ProductIcon } from './icons/ProductIcon';
 import { MixerIcon } from './icons/MixerIcon';
-
+import { useTranslation } from '../context/LanguageContext';
 
 export interface Tool {
     id: string;
@@ -22,91 +23,27 @@ export interface Tool {
     icon: React.ReactNode;
 }
 
-const tools: Tool[] = [
-    {
-        id: 'face-swap',
-        title: 'Yüz Değiştirme',
-        description: 'İki görüntü arasında yüzleri sorunsuzca değiştirin.',
-        icon: <SwapIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'image-mixer',
-        title: 'Fotoğraf Birleştirici',
-        description: 'Birden fazla fotoğrafı birleştirerek yeni bir sahne oluşturun.',
-        icon: <MixerIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'virtual-try-on',
-        title: 'Sanal Deneme',
-        description: 'Bir takıyı veya aksesuarı bir model üzerinde deneyin.',
-        icon: <JewelIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'image-enhancer',
-        title: 'Görüntü İyileştirici',
-        description: 'Fotoğraflarınızın çözünürlüğünü ve netliğini artırın.',
-        icon: <EnhanceIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'colorize-photo',
-        title: 'Fotoğraf Renklendirme',
-        description: 'Siyah beyaz fotoğraflara canlı ve gerçekçi renkler ekleyin.',
-        icon: <ColorizeIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'magic-eraser',
-        title: 'Sihirli Silgi',
-        description: 'Fotoğraflarınızdaki istenmeyen nesneleri silin.',
-        icon: <EraserIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'magic-expand',
-        title: 'Sihirli Genişletme',
-        description: 'Fotoğraflarınızın sınırlarını yapay zeka ile genişletin.',
-        icon: <ExpandIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'outfit-changer',
-        title: 'Kıyafet Değiştirici',
-        description: 'Metin açıklamasıyla bir kişinin kıyafetini değiştirin.',
-        icon: <OutfitIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'outfit-transfer',
-        title: 'Kıyafet Aktarma',
-        description: 'Bir fotoğraftaki kıyafeti başka bir kişiye giydirin.',
-        icon: <TransferIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'background-swap',
-        title: 'Arka Plan Değiştirme',
-        description: 'Bir özneyi yeni bir arka plana yerleştirin.',
-        icon: <BackgroundIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'interior-designer',
-        title: 'Yapay Zeka İç Mimar',
-        description: 'Odanızın fotoğrafını yükleyin ve yeniden dekore edin.',
-        icon: <InteriorDesignerIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'headshot-generator',
-        title: 'Yapay Zeka Vesikalık',
-        description: 'Selfie\'lerinizden profesyonel vesikalık fotoğraflar oluşturun.',
-        icon: <HeadshotIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'product-photographer',
-        title: 'Yapay Zeka Ürün Fotoğrafçısı',
-        description: 'Ürünleriniz için stüdyo kalitesinde fotoğraflar üretin.',
-        icon: <ProductIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
-    {
-        id: 'custom-edit',
-        title: 'Özel Düzenleme',
-        description: 'Ne istediğinizi yazın, yapay zeka yapsın.',
-        icon: <WandIcon className="w-10 h-10 mb-4 text-indigo-400" />
-    },
+const toolIcons: { [key: string]: React.ReactNode } = {
+    'face-swap': <SwapIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'image-mixer': <MixerIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'virtual-try-on': <JewelIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'image-enhancer': <EnhanceIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'colorize-photo': <ColorizeIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'magic-eraser': <EraserIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'magic-expand': <ExpandIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'outfit-changer': <OutfitIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'outfit-transfer': <TransferIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'background-swap': <BackgroundIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'interior-designer': <InteriorDesignerIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'headshot-generator': <HeadshotIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'product-photographer': <ProductIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'custom-edit': <WandIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+};
+
+const toolIds = [
+    'face-swap', 'image-mixer', 'virtual-try-on', 'image-enhancer', 'colorize-photo', 'magic-eraser', 
+    'magic-expand', 'outfit-changer', 'outfit-transfer', 'background-swap', 'interior-designer', 
+    'headshot-generator', 'product-photographer', 'custom-edit'
 ];
 
 interface CategorySelectorProps {
@@ -114,11 +51,20 @@ interface CategorySelectorProps {
 }
 
 export const CategorySelector: React.FC<CategorySelectorProps> = ({ onSelectTool }) => {
+    const { t } = useTranslation();
+
+    const tools: Tool[] = toolIds.map(id => ({
+        id: id,
+        title: t(`categorySelector.tools.${id}.title`),
+        description: t(`categorySelector.tools.${id}.description`),
+        icon: toolIcons[id]
+    }));
+
     return (
         <div className="w-full max-w-5xl">
             <div className="text-center mb-12">
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">Ne yapmak istersiniz?</h2>
-                <p className="mt-4 text-lg text-gray-400">Bir araç seçerek başlayın</p>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">{t('categorySelector.title')}</h2>
+                <p className="mt-4 text-lg text-gray-400">{t('categorySelector.subtitle')}</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 {tools.sort((a, b) => a.title.localeCompare(b.title)).map((tool) => (

@@ -1,19 +1,22 @@
+
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
 import { ActionButton } from '../components/ActionButton';
 import { EnhanceIcon } from '../components/icons/EnhanceIcon';
 import { enhanceImage } from '../services/geminiService';
+import { useTranslation } from '../context/LanguageContext';
 
 const ImageEnhancerView: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleAction = useCallback(async () => {
     if (!image) {
-      setError('Lütfen iyileştirilecek bir görüntü yükleyin.');
+      setError(t('views.imageEnhancer.error'));
       return;
     }
 
@@ -26,15 +29,22 @@ const ImageEnhancerView: React.FC = () => {
       if (result) {
         setResultImage(`data:image/png;base64,${result}`);
       } else {
-        setError('Yapay zeka görüntüyü işleyemedi. Lütfen farklı bir tane deneyin.');
+        setError(t('errors.gemini.processFailed'));
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+      if (errorMessage.includes('API Key not valid')) {
+        setError(t('errors.gemini.apiKeyInvalid'));
+      } else if (errorMessage.includes('API Key not found')) {
+        setError(t('errors.gemini.apiKeyMissing'));
+      } else {
+        setError(t('errors.gemini.generic'));
+      }
     } finally {
       setLoading(false);
     }
-  }, [image]);
+  }, [image, t]);
   
   const handleReset = () => {
     setImage(null);
@@ -46,8 +56,8 @@ const ImageEnhancerView: React.FC = () => {
   return (
     <div className="w-full max-w-xl">
         <ImageUploader 
-            label="Görüntü Yükle" 
-            description="Netliği, çözünürlüğü ve renkleri iyileştirin."
+            label={t('views.imageEnhancer.label')} 
+            description={t('views.imageEnhancer.description')}
             image={image} 
             onImageUpload={setImage} 
         />
@@ -57,8 +67,8 @@ const ImageEnhancerView: React.FC = () => {
               onClick={handleAction} 
               disabled={!image || loading} 
               loading={loading}
-              text="Görüntüyü İyileştir"
-              loadingText="İyileştiriliyor..."
+              text={t('views.imageEnhancer.buttonText')}
+              loadingText={t('views.imageEnhancer.buttonLoadingText')}
               icon={<EnhanceIcon className="w-6 h-6 mr-3" />}
             />
         </div>

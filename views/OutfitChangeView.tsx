@@ -6,6 +6,7 @@ import { ActionButton } from '../components/ActionButton';
 import { OutfitIcon } from '../components/icons/OutfitIcon';
 import { TransferIcon } from '../components/icons/TransferIcon';
 import { changeOutfit, transferOutfit } from '../services/geminiService';
+import { useTranslation } from '../context/LanguageContext';
 
 const OutfitChangeView: React.FC = () => {
   const [image, setImage] = useState<string | null>(null);
@@ -14,14 +15,15 @@ const OutfitChangeView: React.FC = () => {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleAction = useCallback(async () => {
     if (!image) {
-      setError('Lütfen bir kişi resmi yükleyin.');
+      setError(t('views.outfitChange.error'));
       return;
     }
     if (!outfitImage && !prompt) {
-        setError('Lütfen yeni bir kıyafet resmi yükleyin veya bir açıklama girin.');
+        setError(t('views.outfitChange.errorPrompt'));
         return;
     }
 
@@ -40,15 +42,22 @@ const OutfitChangeView: React.FC = () => {
       if (result) {
         setResultImage(`data:image/png;base64,${result}`);
       } else {
-        setError('Yapay zeka görüntüyü işleyemedi. Lütfen farklı bir tane deneyin.');
+        setError(t('errors.gemini.processFailed'));
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+      if (errorMessage.includes('API Key not valid')) {
+        setError(t('errors.gemini.apiKeyInvalid'));
+      } else if (errorMessage.includes('API Key not found')) {
+        setError(t('errors.gemini.apiKeyMissing'));
+      } else {
+        setError(t('errors.gemini.generic'));
+      }
     } finally {
       setLoading(false);
     }
-  }, [image, outfitImage, prompt]);
+  }, [image, outfitImage, prompt, t]);
   
   const handleReset = () => {
     setImage(null);
@@ -63,30 +72,30 @@ const OutfitChangeView: React.FC = () => {
     <div className="w-full max-w-xl mx-auto">
         <div className="space-y-8">
             <ImageUploader 
-                label="Kişi" 
-                description="Kıyafetini değiştirmek istediğiniz kişi."
+                label={t('views.outfitChange.personLabel')} 
+                description={t('views.outfitChange.personDescription')}
                 image={image} 
                 onImageUpload={setImage} 
             />
             <ImageUploader 
-                label="Yeni Kıyafet Resmi (İsteğe Bağlı)" 
-                description="Modelin giymesi için bir kıyafet resmi yükleyin veya bir link yapıştırın."
+                label={t('views.outfitChange.newOutfitLabel')} 
+                description={t('views.outfitChange.newOutfitDescription')}
                 image={outfitImage} 
                 onImageUpload={setOutfitImage}
                 enableUrlFetch={true}
             />
             <div>
                 <label htmlFor="prompt" className="block text-xl font-semibold text-white text-center mb-2">
-                  {outfitImage ? 'Ek Talimatlar (İsteğe Bağlı)' : 'Yeni Kıyafet'}
+                  {outfitImage ? t('views.outfitChange.promptLabel') : t('views.outfitChange.promptLabelRequired')}
                 </label>
                 <p className="text-sm text-gray-400 text-center mb-4">
-                  {outfitImage ? 'Değişiklik için ek notlar ekleyin.' : 'Ne giymesini istediğinizi açıklayın.'}
+                  {outfitImage ? t('views.outfitChange.promptDescription') : t('views.outfitChange.promptDescriptionRequired')}
                 </p>
                 <textarea
                     id="prompt"
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value)}
-                    placeholder={outfitImage ? "Örn: rengini kırmızı yap" : "Örn: siyah deri ceket ve mavi kot pantolon"}
+                    placeholder={outfitImage ? t('views.outfitChange.promptPlaceholder') : t('views.outfitChange.promptPlaceholderRequired')}
                     className="w-full h-24 p-4 bg-gray-800 border-2 border-gray-600 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-indigo-500 transition-colors"
                     disabled={loading}
                 />
@@ -98,8 +107,8 @@ const OutfitChangeView: React.FC = () => {
               onClick={handleAction} 
               disabled={!image || (!outfitImage && !prompt) || loading} 
               loading={loading}
-              text="Kıyafeti Değiştir"
-              loadingText="Değiştiriliyor..."
+              text={t('views.outfitChange.buttonText')}
+              loadingText={t('views.outfitChange.buttonLoadingText')}
               icon={outfitImage ? <TransferIcon className="w-6 h-6 mr-3" /> : <OutfitIcon className="w-6 h-6 mr-3" />}
             />
         </div>

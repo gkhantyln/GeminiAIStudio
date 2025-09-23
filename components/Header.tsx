@@ -1,7 +1,9 @@
+
 import React from 'react';
 import { SparklesIcon } from './icons/SparklesIcon';
 import { BackIcon } from './icons/BackIcon';
 import { LogoutIcon } from './icons/LogoutIcon';
+import { useTranslation } from '../context/LanguageContext';
 
 interface HeaderProps {
   title: string;
@@ -11,6 +13,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ title, onBackClick, userId, onLogout }) => {
+  const { t } = useTranslation();
   return (
     <header className="bg-gray-900/50 backdrop-blur-sm border-b border-gray-700/50 py-4 px-4 sm:px-8 sticky top-0 z-10">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -19,7 +22,7 @@ export const Header: React.FC<HeaderProps> = ({ title, onBackClick, userId, onLo
             <button
               onClick={onBackClick}
               className="p-2 rounded-full text-gray-400 hover:bg-gray-700 hover:text-white transition-colors mr-2"
-              aria-label="Go back"
+              aria-label={t('header.goBack')}
             >
               <BackIcon className="w-6 h-6" />
             </button>
@@ -36,11 +39,11 @@ export const Header: React.FC<HeaderProps> = ({ title, onBackClick, userId, onLo
         <div className="flex items-center justify-end flex-1">
           {userId && onLogout && (
             <div className="flex items-center gap-2 sm:gap-4">
-              <span className="hidden sm:inline text-sm text-gray-400">Hoşgeldiniz, {userId}</span>
+              <span className="hidden sm:inline text-sm text-gray-400">{t('header.welcome', { userId })}</span>
               <button
                 onClick={onLogout}
                 className="p-2 rounded-full text-gray-400 hover:bg-gray-700 hover:text-white transition-colors"
-                aria-label="Logout"
+                aria-label={t('header.logout')}
               >
                 <LogoutIcon className="w-6 h-6" />
               </button>

@@ -1,9 +1,11 @@
+
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
 import { ActionButton } from '../components/ActionButton';
 import { SwapIcon } from '../components/icons/SwapIcon';
 import { swapFaces } from '../services/geminiService';
+import { useTranslation } from '../context/LanguageContext';
 
 const FaceSwapView: React.FC = () => {
   const [sourceImage, setSourceImage] = useState<string | null>(null);
@@ -11,10 +13,11 @@ const FaceSwapView: React.FC = () => {
   const [swappedImage, setSwappedImage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleAction = useCallback(async () => {
     if (!sourceImage || !targetImage) {
-      setError('Lütfen hem bir kaynak hem de bir hedef resmi yükleyin.');
+      setError(t('views.faceSwap.error'));
       return;
     }
 
@@ -27,15 +30,22 @@ const FaceSwapView: React.FC = () => {
       if (result) {
         setSwappedImage(`data:image/png;base64,${result}`);
       } else {
-        setError('Yapay zeka görüntüleri işleyemedi. Lütfen farklı olanları deneyin.');
+        setError(t('errors.gemini.processFailed'));
       }
     } catch (err) {
       console.error(err);
-      setError(err instanceof Error ? err.message : 'Bilinmeyen bir hata oluştu.');
+      const errorMessage = err instanceof Error ? err.message : t('errors.unknown');
+      if (errorMessage.includes('API Key not valid')) {
+        setError(t('errors.gemini.apiKeyInvalid'));
+      } else if (errorMessage.includes('API Key not found')) {
+        setError(t('errors.gemini.apiKeyMissing'));
+      } else {
+        setError(t('errors.gemini.generic'));
+      }
     } finally {
       setLoading(false);
     }
-  }, [sourceImage, targetImage]);
+  }, [sourceImage, targetImage, t]);
   
   const handleReset = () => {
     setSourceImage(null);
@@ -49,14 +59,14 @@ const FaceSwapView: React.FC = () => {
     <div className="w-full max-w-5xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
             <ImageUploader 
-              label="Kaynak Görüntü" 
-              description="Ana fotoğraf. Yüz burada değiştirilecek."
+              label={t('views.faceSwap.sourceLabel')}
+              description={t('views.faceSwap.sourceDescription')}
               image={sourceImage} 
               onImageUpload={setSourceImage} 
             />
             <ImageUploader 
-              label="Hedef Yüz" 
-              description="Kaynak görüntüye eklenecek yüz."
+              label={t('views.faceSwap.targetLabel')}
+              description={t('views.faceSwap.targetDescription')}
               image={targetImage} 
               onImageUpload={setTargetImage} 
             />
@@ -67,8 +77,8 @@ const FaceSwapView: React.FC = () => {
               onClick={handleAction} 
               disabled={!sourceImage || !targetImage || loading} 
               loading={loading}
-              text="Yüzleri Değiştir"
-              loadingText="Değiştiriliyor..."
+              text={t('views.faceSwap.buttonText')}
+              loadingText={t('views.faceSwap.buttonLoadingText')}
               icon={<SwapIcon className="w-6 h-6 mr-3" />}
             />
         </div>
