@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Modality } from "@google/genai";
 
 const getAiClient = () => {
@@ -12,6 +11,7 @@ const getAiClient = () => {
 };
 
 const imageModel = 'gemini-2.5-flash-image-preview';
+const videoModel = 'veo-2.0-generate-001';
 
 const fileToGenerativePart = (base64Data: string) => {
   const match = base64Data.match(/^data:(image\/(?:jpeg|png|webp));base64,(.*)$/);
@@ -59,6 +59,63 @@ const callGemini = async (parts: any[]): Promise<string | null> => {
     throw new Error("Could not communicate with the Gemini API.");
   }
 }
+
+export const generateVideo = async (prompt: string, imageBase64: string | null, aspectRatio: string): Promise<string | null> => {
+    const ai = getAiClient();
+    try {
+        const videoParams: any = {
+            model: videoModel,
+            prompt: prompt,
+            config: {
+                numberOfVideos: 1,
+                aspectRatio: aspectRatio,
+            }
+        };
+
+        if (imageBase64) {
+            const match = imageBase64.match(/^data:(image\/(?:jpeg|png|webp));base64,(.*)$/);
+            if (match) {
+                videoParams.image = {
+                    imageBytes: match[2],
+                    mimeType: match[1],
+                };
+            }
+        }
+        
+        let operation = await ai.models.generateVideos(videoParams);
+
+        while (!operation.done) {
+            await new Promise(resolve => setTimeout(resolve, 10000)); // Poll every 10 seconds
+            operation = await ai.operations.getVideosOperation({ operation: operation });
+        }
+
+        const downloadLink = operation.response?.generatedVideos?.[0]?.video?.uri;
+        if (!downloadLink) {
+            return null;
+        }
+
+        // The response.body contains the MP4 bytes. You must append an API key when fetching from the download link.
+        const apiKey = localStorage.getItem('gemini-api-key');
+        const response = await fetch(`${downloadLink}&key=${apiKey}`);
+        if (!response.ok) {
+            throw new Error(`Failed to download video: ${response.statusText}`);
+        }
+        const blob = await response.blob();
+        const videoUrl = URL.createObjectURL(blob);
+        
+        return videoUrl;
+
+    } catch (error: any) {
+        console.error("Error communicating with Gemini API for video generation:", error);
+        if (error.message && error.message.includes('API key not valid')) {
+            localStorage.removeItem('gemini-api-key');
+            localStorage.removeItem('user-id');
+            window.location.reload();
+            throw new Error("Your API Key is not valid. Please log in again.");
+        }
+        throw new Error("Could not generate video with the Gemini API.");
+    }
+};
 
 export const swapFaces = async (sourceImageBase64: string, targetImageBase64: string): Promise<string | null> => {
   const sourcePart = fileToGenerativePart(sourceImageBase64);

@@ -1,4 +1,3 @@
-
 export const en = {
     header: {
         welcome: 'Welcome, {{userId}}',
@@ -38,6 +37,7 @@ export const en = {
             'headshot-generator': { title: 'AI Headshot Generator', description: 'Create professional headshots from your selfies.' },
             'product-photographer': { title: 'AI Product Photographer', description: 'Generate studio-quality photos for your products.' },
             'custom-edit': { title: 'Custom Edit', description: 'Describe what you want, and let the AI do it.' },
+            'video-generator': { title: 'AI Video Generator', description: 'Create a short video from a text prompt.' },
         }
     },
     imageUploader: {
@@ -77,6 +77,7 @@ export const en = {
             productPhotoFailed: 'The AI could not create the product photo. Please try a different image or scene.',
             outfitTransferFailed: 'The AI could not transfer the outfit. Please try different images.',
             imageMixFailed: 'The AI could not mix the images. Please try different ones.',
+            videoGenFailed: 'The AI could not generate the video. Please try a different prompt.',
         },
         unknown: 'An unknown error occurred.',
     },
@@ -234,5 +235,29 @@ export const en = {
             errorImages: 'Please upload at least 2 images.',
             errorPrompt: 'Please enter a prompt to combine the images.',
         },
+        videoGenerator: {
+            uploadLabel: 'Source Image (Optional)',
+            uploadDescription: 'Provide an initial image for the video.',
+            promptLabel: 'Video Prompt',
+            promptDescription: 'Describe the video you want to create.',
+            promptPlaceholder: 'e.g., A neon hologram of a cat driving at top speed',
+            aspectRatioLabel: 'Aspect Ratio',
+            ratios: {
+                '16:9': '16:9 (Wide)',
+                '9:16': '9:16 (Tall)',
+                '1:1': '1:1 (Square)',
+                '4:3': '4:3 (Standard)',
+            },
+            buttonText: 'Generate Video',
+            buttonLoadingText: 'Generating...',
+            error: 'Please enter a prompt to generate the video.',
+            loading: {
+                message1: 'Warming up the AI director... this can take a few minutes.',
+                message2: 'The virtual cameras are rolling... capturing the first frames.',
+                message3: 'Rendering the scene... This is the longest part.',
+                message4: 'Adding special effects and sound... just kidding, no sound.',
+                message5: 'Finalizing the video. Almost there!',
+            }
+        }
     },
 };

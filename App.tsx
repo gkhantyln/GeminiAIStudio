@@ -18,6 +18,7 @@ import MagicExpandView from './views/MagicExpandView';
 import InteriorDesignerView from './views/InteriorDesignerView';
 import LoginView from './views/LoginView';
 import ImageMixerView from './views/ImageMixerView';
+import VideoGeneratorView from './views/VideoGeneratorView';
 import { useTranslation } from './context/LanguageContext';
 
 const App: React.FC = () => {
@@ -92,6 +93,8 @@ const App: React.FC = () => {
         return <CustomEditView />;
       case 'image-mixer':
         return <ImageMixerView />;
+      case 'video-generator':
+        return <VideoGeneratorView />;
       default:
         return <CategorySelector onSelectTool={setActiveTool} />;
     }

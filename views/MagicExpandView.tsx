@@ -89,7 +89,7 @@ const MagicExpandView: React.FC = () => {
         )}
 
         <ResultDisplay
-            swappedImage={resultImage}
+            resultUrl={resultImage}
             loading={loading && !!targetRatio}
             error={error}
             onReset={handleReset}

@@ -84,7 +84,7 @@ const FaceSwapView: React.FC = () => {
         </div>
 
         <ResultDisplay
-            swappedImage={swappedImage}
+            resultUrl={swappedImage}
             loading={loading}
             error={error}
             onReset={handleReset}

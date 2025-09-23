@@ -5,28 +5,32 @@ import { DownloadIcon } from './icons/DownloadIcon';
 import { useTranslation } from '../context/LanguageContext';
 
 interface ResultDisplayProps {
-  swappedImage: string | null;
+  resultUrl: string | null;
   loading: boolean;
   error: string | null;
   onReset: () => void;
+  loadingMessage?: string;
 }
 
-export const ResultDisplay: React.FC<ResultDisplayProps> = ({ swappedImage, loading, error, onReset }) => {
+export const ResultDisplay: React.FC<ResultDisplayProps> = ({ resultUrl, loading, error, onReset, loadingMessage }) => {
   const { t } = useTranslation();
 
-  if (!swappedImage && !loading && !error) {
+  if (!resultUrl && !loading && !error) {
     return null;
   }
 
   const handleDownload = () => {
-    if (!swappedImage) return;
+    if (!resultUrl) return;
+    const isVideo = resultUrl.startsWith('blob:');
     const link = document.createElement('a');
-    link.href = swappedImage;
-    link.download = 'ai-image-studio-result.png';
+    link.href = resultUrl;
+    link.download = isVideo ? 'ai-studio-result.mp4' : 'ai-studio-result.png';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
+  
+  const isVideo = resultUrl?.startsWith('blob:');
 
   return (
     <div className="w-full bg-gray-800 border border-gray-700 rounded-xl p-6 mt-8">
@@ -34,7 +38,7 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ swappedImage, load
       {loading && (
         <div className="flex flex-col items-center justify-center h-80">
           <Spinner />
-          <p className="text-indigo-400 mt-4 animate-pulse">{t('resultDisplay.loading')}</p>
+          <p className="text-indigo-400 mt-4 text-center animate-pulse">{loadingMessage || t('resultDisplay.loading')}</p>
         </div>
       )}
       {error && (
@@ -45,10 +49,23 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ swappedImage, load
             </div>
         </div>
       )}
-      {swappedImage && (
+      {resultUrl && (
         <div className="flex flex-col items-center gap-6">
           <div className="w-full max-w-lg">
-            <img src={swappedImage} alt="AI Result" className="rounded-lg shadow-2xl w-full h-auto object-contain" />
+             {isVideo ? (
+              <video 
+                src={resultUrl} 
+                controls 
+                autoPlay 
+                loop 
+                muted 
+                className="rounded-lg shadow-2xl w-full h-auto object-contain"
+              >
+                Your browser does not support the video tag.
+              </video>
+            ) : (
+              <img src={resultUrl} alt="AI Result" className="rounded-lg shadow-2xl w-full h-auto object-contain" />
+            )}
           </div>
           <div className="flex flex-wrap justify-center items-center gap-4 mt-2">
             <button

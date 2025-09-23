@@ -90,7 +90,7 @@ const CustomEditView: React.FC = () => {
         </div>
 
         <ResultDisplay
-            swappedImage={resultImage}
+            resultUrl={resultImage}
             loading={loading}
             error={error}
             onReset={handleReset}

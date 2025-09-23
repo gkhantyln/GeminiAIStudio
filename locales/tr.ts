@@ -1,4 +1,3 @@
-
 export const tr = {
     header: {
         welcome: 'Hoşgeldiniz, {{userId}}',
@@ -38,6 +37,7 @@ export const tr = {
             'headshot-generator': { title: 'Yapay Zeka Vesikalık', description: 'Selfie\'lerinizden profesyonel vesikalık fotoğraflar oluşturun.' },
             'product-photographer': { title: 'Yapay Zeka Ürün Fotoğrafçısı', description: 'Ürünleriniz için stüdyo kalitesinde fotoğraflar üretin.' },
             'custom-edit': { title: 'Özel Düzenleme', description: 'Ne istediğinizi yazın, yapay zeka yapsın.' },
+            'video-generator': { title: 'Yapay Zeka Video Oluşturucu', description: 'Metin istemiyle kısa bir video oluşturun.' },
         }
     },
     imageUploader: {
@@ -77,6 +77,7 @@ export const tr = {
             productPhotoFailed: 'Yapay zeka ürün fotoğrafı oluşturamadı. Lütfen farklı bir resim veya sahne deneyin.',
             outfitTransferFailed: 'Yapay zeka kıyafeti aktaramadı. Lütfen farklı görseller deneyin.',
             imageMixFailed: 'Yapay zeka görüntüleri birleştiremedi. Lütfen farklı olanları deneyin.',
+            videoGenFailed: 'Yapay zeka videoyu oluşturamadı. Lütfen farklı bir istem deneyin.',
         },
         unknown: 'Bilinmeyen bir hata oluştu.',
     },
@@ -234,5 +235,29 @@ export const tr = {
             errorImages: 'Lütfen en az 2 resim yükleyin.',
             errorPrompt: 'Lütfen resimleri birleştirmek için bir senaryo yazın.',
         },
+        videoGenerator: {
+            uploadLabel: 'Kaynak Görüntü (İsteğe Bağlı)',
+            uploadDescription: 'Video için bir başlangıç görüntüsü sağlayın.',
+            promptLabel: 'Video Senaryosu',
+            promptDescription: 'Oluşturmak istediğiniz videoyu açıklayın.',
+            promptPlaceholder: 'Örn: Son sürat giden bir kedinin neon hologramı',
+            aspectRatioLabel: 'En-Boy Oranı',
+            ratios: {
+                '16:9': '16:9 (Geniş)',
+                '9:16': '9:16 (Dikey)',
+                '1:1': '1:1 (Kare)',
+                '4:3': '4:3 (Standart)',
+            },
+            buttonText: 'Video Oluştur',
+            buttonLoadingText: 'Oluşturuluyor...',
+            error: 'Lütfen videoyu oluşturmak için bir senaryo girin.',
+            loading: {
+                message1: 'Yapay zeka yönetmeni hazırlanıyor... bu birkaç dakika sürebilir.',
+                message2: 'Sanal kameralar kayda başladı... ilk kareler yakalanıyor.',
+                message3: 'Sahne oluşturuluyor... Bu en uzun süren kısımdır.',
+                message4: 'Özel efektler ekleniyor... şaka, ses efekti yok.',
+                message5: 'Video tamamlanıyor. Neredeyse bitti!',
+            }
+        }
     },
 };
