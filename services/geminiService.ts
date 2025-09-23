@@ -48,7 +48,9 @@ const callGemini = async (parts: any[]): Promise<string | null> => {
     return null;
   } catch (error: any) {
     console.error("Error communicating with Gemini API:", error);
-    if (error.message && error.message.includes('API key not valid')) {
+    const errorString = JSON.stringify(error);
+
+    if (errorString.includes('API key not valid')) {
         // Here you could also trigger a logout
         localStorage.removeItem('gemini-api-key');
         localStorage.removeItem('user-id');
@@ -56,7 +58,7 @@ const callGemini = async (parts: any[]): Promise<string | null> => {
         window.location.reload();
         throw new Error("Your API Key is not valid. Please log in again.");
     }
-    if (error.message && (error.message.includes('exceeded your current quota') || error.message.includes('RESOURCE_EXHAUSTED'))) {
+    if (errorString.includes('exceeded your current quota') || errorString.includes('RESOURCE_EXHAUSTED')) {
         throw new Error("QUOTA_EXCEEDED");
     }
     throw new Error("Could not communicate with the Gemini API.");
@@ -110,13 +112,14 @@ export const generateVideo = async (prompt: string, imageBase64: string | null, 
 
     } catch (error: any) {
         console.error("Error communicating with Gemini API for video generation:", error);
-        if (error.message && error.message.includes('API key not valid')) {
+        const errorString = JSON.stringify(error);
+        if (errorString.includes('API key not valid')) {
             localStorage.removeItem('gemini-api-key');
             localStorage.removeItem('user-id');
             window.location.reload();
             throw new Error("Your API Key is not valid. Please log in again.");
         }
-        if (error.message && (error.message.includes('exceeded your current quota') || error.message.includes('RESOURCE_EXHAUSTED'))) {
+        if (errorString.includes('exceeded your current quota') || errorString.includes('RESOURCE_EXHAUSTED')) {
             throw new Error("QUOTA_EXCEEDED");
         }
         throw new Error("Could not generate video with the Gemini API.");
