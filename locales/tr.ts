@@ -62,12 +62,14 @@ export const tr = {
         errorTitle: 'Bir Hata Oluştu',
         download: 'İndir',
         startOver: 'Yeni Başla',
+        useImage: 'Bu Fotoğrafı Kullan',
     },
     errors: {
         gemini: {
             generic: 'Gemini API ile iletişim kurulamadı.',
             apiKeyMissing: 'API Anahtarı bulunamadı. Lütfen giriş yapın.',
             apiKeyInvalid: 'API Anahtarınız geçerli değil. Lütfen tekrar giriş yapın.',
+            quotaExceeded: 'API kullanım kotanızı aştınız. Lütfen planınızı kontrol edin veya daha sonra tekrar deneyin.',
             processFailed: 'Yapay zeka görüntüleri işleyemedi. Lütfen farklı olanları deneyin.',
             requestFailed: 'Yapay zeka isteğinizi yerine getiremedi. Lütfen farklı bir şekilde açıklamayı deneyin.',
             eraseFailed: 'Yapay zeka nesneyi silemedi. Lütfen tekrar deneyin.',

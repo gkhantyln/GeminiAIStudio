@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
@@ -70,6 +69,8 @@ const ImageMixerView: React.FC = () => {
                 setError(t('errors.gemini.apiKeyInvalid'));
             } else if (errorMessage.includes('API Key not found')) {
                 setError(t('errors.gemini.apiKeyMissing'));
+            } else if (errorMessage === 'QUOTA_EXCEEDED') {
+                setError(t('errors.gemini.quotaExceeded'));
             } else {
                 setError(t('errors.gemini.generic'));
             }

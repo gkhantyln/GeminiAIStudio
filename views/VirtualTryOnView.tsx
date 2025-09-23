@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { ImageUploader } from '../components/ImageUploader';
 import { ResultDisplay } from '../components/ResultDisplay';
@@ -39,6 +38,8 @@ const VirtualTryOnView: React.FC = () => {
         setError(t('errors.gemini.apiKeyInvalid'));
       } else if (errorMessage.includes('API Key not found')) {
         setError(t('errors.gemini.apiKeyMissing'));
+      } else if (errorMessage === 'QUOTA_EXCEEDED') {
+        setError(t('errors.gemini.quotaExceeded'));
       } else {
         setError(t('errors.gemini.generic'));
       }
@@ -54,6 +55,14 @@ const VirtualTryOnView: React.FC = () => {
     setError(null);
     setLoading(false);
   }
+  
+  const handleUseImage = (imageUrl: string) => {
+    setPersonImage(imageUrl);
+    setItemImage(null);
+    setResultImage(null);
+    setError(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <div className="w-full max-w-5xl">
@@ -88,6 +97,7 @@ const VirtualTryOnView: React.FC = () => {
             loading={loading}
             error={error}
             onReset={handleReset}
+            onUseImage={handleUseImage}
         />
     </div>
   );

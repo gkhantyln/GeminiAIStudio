@@ -56,6 +56,9 @@ const callGemini = async (parts: any[]): Promise<string | null> => {
         window.location.reload();
         throw new Error("Your API Key is not valid. Please log in again.");
     }
+    if (error.message && (error.message.includes('exceeded your current quota') || error.message.includes('RESOURCE_EXHAUSTED'))) {
+        throw new Error("QUOTA_EXCEEDED");
+    }
     throw new Error("Could not communicate with the Gemini API.");
   }
 }
@@ -112,6 +115,9 @@ export const generateVideo = async (prompt: string, imageBase64: string | null, 
             localStorage.removeItem('user-id');
             window.location.reload();
             throw new Error("Your API Key is not valid. Please log in again.");
+        }
+        if (error.message && (error.message.includes('exceeded your current quota') || error.message.includes('RESOURCE_EXHAUSTED'))) {
+            throw new Error("QUOTA_EXCEEDED");
         }
         throw new Error("Could not generate video with the Gemini API.");
     }

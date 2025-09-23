@@ -62,12 +62,14 @@ export const en = {
         errorTitle: 'An Error Occurred',
         download: 'Download',
         startOver: 'Start Over',
+        useImage: 'Use This Image',
     },
     errors: {
         gemini: {
             generic: 'Could not communicate with the Gemini API.',
             apiKeyMissing: 'API Key not found. Please log in.',
             apiKeyInvalid: 'Your API Key is not valid. Please log in again.',
+            quotaExceeded: 'You have exceeded your API usage quota. Please check your plan or try again later.',
             processFailed: 'The AI could not process the images. Please try different ones.',
             requestFailed: 'The AI could not fulfill your request. Please try describing it differently.',
             eraseFailed: 'The AI could not erase the object. Please try again.',

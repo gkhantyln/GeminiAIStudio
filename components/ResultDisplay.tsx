@@ -2,6 +2,7 @@
 import React from 'react';
 import { Spinner } from './Spinner';
 import { DownloadIcon } from './icons/DownloadIcon';
+import { UseImageIcon } from './icons/UseImageIcon';
 import { useTranslation } from '../context/LanguageContext';
 
 interface ResultDisplayProps {
@@ -10,9 +11,10 @@ interface ResultDisplayProps {
   error: string | null;
   onReset: () => void;
   loadingMessage?: string;
+  onUseImage?: (imageUrl: string) => void;
 }
 
-export const ResultDisplay: React.FC<ResultDisplayProps> = ({ resultUrl, loading, error, onReset, loadingMessage }) => {
+export const ResultDisplay: React.FC<ResultDisplayProps> = ({ resultUrl, loading, error, onReset, loadingMessage, onUseImage }) => {
   const { t } = useTranslation();
 
   if (!resultUrl && !loading && !error) {
@@ -75,6 +77,15 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({ resultUrl, loading
               <DownloadIcon className="w-5 h-5 mr-2" />
               {t('resultDisplay.download')}
             </button>
+            {onUseImage && !isVideo && (
+                <button
+                    onClick={() => onUseImage(resultUrl)}
+                    className="inline-flex items-center justify-center px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-purple-500"
+                >
+                    <UseImageIcon className="w-5 h-5 mr-2" />
+                    {t('resultDisplay.useImage')}
+                </button>
+            )}
             <button 
               onClick={onReset}
               className="px-6 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-500 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-gray-500"
