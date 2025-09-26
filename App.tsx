@@ -20,6 +20,7 @@ import LoginView from './views/LoginView';
 import ImageMixerView from './views/ImageMixerView';
 import VideoGeneratorView from './views/VideoGeneratorView';
 import PromptGeneratorView from './views/PromptGeneratorView';
+import AgeYouthFilterView from './views/AgeYouthFilterView';
 import { useTranslation } from './context/LanguageContext';
 
 const App: React.FC = () => {
@@ -98,6 +99,8 @@ const App: React.FC = () => {
         return <PromptGeneratorView />;
       case 'video-generator':
         return <VideoGeneratorView />;
+      case 'age-youth-filter':
+        return <AgeYouthFilterView />;
       default:
         return <CategorySelector onSelectTool={setActiveTool} />;
     }

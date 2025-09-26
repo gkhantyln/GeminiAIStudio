@@ -39,6 +39,7 @@ export const tr = {
             'custom-edit': { title: 'Özel Düzenleme', description: 'Ne istediğinizi yazın, yapay zeka yapsın.' },
             'prompt-generator': { title: 'Prompt Oluşturucu', description: 'Görüntünüzden ayrıntılı bir prompt oluşturun.' },
             'video-generator': { title: 'Yapay Zeka Video Oluşturucu', description: 'Metin istemiyle kısa bir video oluşturun.' },
+            'age-youth-filter': { title: 'Yaş & Gençlik Filtresi', description: 'Bir kişinin farklı yaşlarda nasıl göründüğünü görün.' },
         }
     },
     imageUploader: {
@@ -82,6 +83,7 @@ export const tr = {
             imageMixFailed: 'Yapay zeka görüntüleri birleştiremedi. Lütfen farklı olanları deneyin.',
             promptGenFailed: 'Yapay zeka bu resim için bir prompt oluşturamadı. Lütfen farklı bir resim deneyin.',
             videoGenFailed: 'Yapay zeka videoyu oluşturamadı. Lütfen farklı bir istem deneyin.',
+            ageTransformFailed: 'Yapay zeka yaşı dönüştüremedi. Lütfen farklı bir resim deneyin.',
         },
         unknown: 'Bilinmeyen bir hata oluştu.',
     },
@@ -281,6 +283,22 @@ export const tr = {
                 message3: 'Sahne oluşturuluyor... Bu en uzun süren kısımdır.',
                 message4: 'Özel efektler ekleniyor... şaka, ses efekti yok.',
                 message5: 'Video tamamlanıyor. Neredeyse bitti!',
+            }
+        },
+        ageYouthFilter: {
+            uploadLabel: 'Fotoğraf Yükle',
+            uploadDescription: 'Bir kişinin net bir fotoğrafını yükleyin.',
+            targetAgeLabel: 'Hedef Yaşı Seçin',
+            buttonText: 'Dönüştür',
+            buttonLoadingText: 'Dönüştürülüyor...',
+            error: 'Lütfen bir resim yükleyin ve bir hedef yaş seçin.',
+            ages: {
+                Baby: 'Bebek',
+                Child: 'Çocuk',
+                Teen: 'Genç',
+                'Middle-Aged': 'Orta Yaşlı',
+                Senior: 'Kıdemli',
+                Elderly: 'Çok Yaşlı',
             }
         }
     },

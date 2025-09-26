@@ -39,6 +39,7 @@ export const en = {
             'custom-edit': { title: 'Custom Edit', description: 'Describe what you want, and let the AI do it.' },
             'prompt-generator': { title: 'Prompt Generator', description: 'Generate a detailed prompt from your image.' },
             'video-generator': { title: 'AI Video Generator', description: 'Create a short video from a text prompt.' },
+            'age-youth-filter': { title: 'Age & Youth Filter', description: 'See what someone looks like at different ages.' },
         }
     },
     imageUploader: {
@@ -82,6 +83,7 @@ export const en = {
             imageMixFailed: 'The AI could not mix the images. Please try different ones.',
             promptGenFailed: 'The AI could not generate a prompt for the image. Please try a different one.',
             videoGenFailed: 'The AI could not generate the video. Please try a different prompt.',
+            ageTransformFailed: 'The AI could not transform the age. Please try a different image.',
         },
         unknown: 'An unknown error occurred.',
     },
@@ -281,6 +283,22 @@ export const en = {
                 message3: 'Rendering the scene... This is the longest part.',
                 message4: 'Adding special effects and sound... just kidding, no sound.',
                 message5: 'Finalizing the video. Almost there!',
+            }
+        },
+        ageYouthFilter: {
+            uploadLabel: 'Upload Photo',
+            uploadDescription: 'Upload a clear photo of a person.',
+            targetAgeLabel: 'Select Target Age',
+            buttonText: 'Transform',
+            buttonLoadingText: 'Transforming...',
+            error: 'Please upload an image and select a target age.',
+            ages: {
+                Baby: 'Baby',
+                Child: 'Child',
+                Teen: 'Teen',
+                'Middle-Aged': 'Middle-Aged',
+                Senior: 'Senior',
+                Elderly: 'Elderly',
             }
         }
     },

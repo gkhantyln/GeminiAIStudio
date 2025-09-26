@@ -389,3 +389,39 @@ export const generatePromptFromImage = async (imageBase64: string, detailLevel: 
     throw new Error("Could not communicate with the Gemini API.");
   }
 };
+
+export const transformAge = async (imageBase64: string, targetAge: string): Promise<string | null> => {
+    const imagePart = fileToGenerativePart(imageBase64);
+
+    const ageInstructions: { [key: string]: string } = {
+        'Baby': `**Target: Baby (6-12 months old).**
+                 **Physiological Changes:** Drastically increase subcutaneous fat ('baby fat') for rounded cheeks and a soft jawline. Enlarge the cranium relative to the face. Make eyes appear larger and rounder. Skin must be perfectly smooth with rosy undertones. Hair should be fine, soft baby hair.`,
+        'Child': `**Target: Child (7-10 years old).**
+                  **Physiological Changes:** Reduce 'baby fat' but keep cheeks full. Define the face slightly more than a baby. The nose bridge is less developed. Skin is smooth. Hair texture is similar to the adult but finer.`,
+        'Teen': `**Target: Teenager (15-18 years old).**
+                 **Physiological Changes:** Jawline and facial structure are more defined than a child's but not fully mature. Skin may show some adolescent texture. Features are sharper than in childhood.`,
+        'Middle-Aged': `**Target: Middle-Aged (45-55 years old).**
+                       **Physiological Changes:** Introduce subtle aging signs: fine lines around eyes (crow's feet) and mouth (nasolabial folds). Slight loss of skin elasticity, especially at the jawline. Hair may show some graying at the temples. Skin texture becomes less uniform.`,
+        'Senior': `**Target: Senior (65-75 years old).**
+                   **Physiological Changes:** Deepen wrinkles and lines. Noticeable loss of collagen and subcutaneous fat, leading to sagging skin (jowls, under-eye bags). Age spots may appear. Hair becomes thinner and significantly grayer/white.`,
+        'Elderly': `**Target: Elderly (85+ years old).**
+                    **Physiological Changes:** Exaggerate 'Senior' characteristics. Skin becomes much thinner, more translucent. Significant facial volume loss, making bone structure more prominent. Lips become thinner. Wrinkles are deep-set. Hair is sparse, thin, and almost entirely white.`,
+    };
+
+    const textPart = {
+        text: `**Master Task: Hyper-realistic Age Progression/Regression**
+        You are a world-class forensic artist and digital animator specializing in hyper-realistic age transformation. Your task is to transform the person in the source image to a specified target age with absolute photorealism, preserving their core identity.
+
+        **CRITICAL RULES:**
+        1.  **Preserve Identity:** The final image MUST look like the same person, just at a different age. Retain their unique facial structure, eye shape, and core features.
+        2.  **Photorealism is Paramount:** The result must be indistinguishable from a real photograph. Pay meticulous attention to skin texture, hair, and lighting.
+        3.  **Maintain Original Context:** Keep the original image's background, lighting, head pose, and expression as closely as possible. Do not add new elements like glasses or hats unless they are a natural consequence of the aging/de-aging process and style.
+        4.  **Output Image Only:** Do not output any text, explanation, or commentary.
+
+        **SPECIFIC AGE TRANSFORMATION INSTRUCTIONS:**
+        ${ageInstructions[targetAge] || ''}
+        `
+    };
+
+    return callGemini([imagePart, textPart]);
+};
