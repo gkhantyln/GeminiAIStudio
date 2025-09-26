@@ -40,6 +40,7 @@ export const tr = {
             'prompt-generator': { title: 'Prompt Oluşturucu', description: 'Görüntünüzden ayrıntılı bir prompt oluşturun.' },
             'video-generator': { title: 'Yapay Zeka Video Oluşturucu', description: 'Metin istemiyle kısa bir video oluşturun.' },
             'age-youth-filter': { title: 'Yaş & Gençlik Filtresi', description: 'Bir kişinin farklı yaşlarda nasıl göründüğünü görün.' },
+            'photo-restoration': { title: 'Yapay Zeka Fotoğraf Restorasyonu', description: 'Eski, çizik ve solmuş fotoğrafları onarın.' },
         }
     },
     imageUploader: {
@@ -84,6 +85,7 @@ export const tr = {
             promptGenFailed: 'Yapay zeka bu resim için bir prompt oluşturamadı. Lütfen farklı bir resim deneyin.',
             videoGenFailed: 'Yapay zeka videoyu oluşturamadı. Lütfen farklı bir istem deneyin.',
             ageTransformFailed: 'Yapay zeka yaşı dönüştüremedi. Lütfen farklı bir resim deneyin.',
+            restorationFailed: 'Yapay zeka fotoğrafı onaramadı. Lütfen farklı bir tane deneyin.',
         },
         unknown: 'Bilinmeyen bir hata oluştu.',
     },
@@ -300,6 +302,13 @@ export const tr = {
                 Senior: 'Kıdemli',
                 Elderly: 'Çok Yaşlı',
             }
-        }
+        },
+        photoRestoration: {
+            label: 'Eski/Hasarlı Fotoğraf Yükle',
+            description: 'Çizikleri, renk solmalarını ve hasarları onarın.',
+            buttonText: 'Fotoğrafı Onar',
+            buttonLoadingText: 'Onarılıyor...',
+            error: 'Lütfen onarılacak bir fotoğraf yükleyin.',
+        },
     },
 };

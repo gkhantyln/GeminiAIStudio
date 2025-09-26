@@ -40,6 +40,7 @@ export const en = {
             'prompt-generator': { title: 'Prompt Generator', description: 'Generate a detailed prompt from your image.' },
             'video-generator': { title: 'AI Video Generator', description: 'Create a short video from a text prompt.' },
             'age-youth-filter': { title: 'Age & Youth Filter', description: 'See what someone looks like at different ages.' },
+            'photo-restoration': { title: 'AI Photo Restoration', description: 'Repair old, scratched, and faded photographs.' },
         }
     },
     imageUploader: {
@@ -84,6 +85,7 @@ export const en = {
             promptGenFailed: 'The AI could not generate a prompt for the image. Please try a different one.',
             videoGenFailed: 'The AI could not generate the video. Please try a different prompt.',
             ageTransformFailed: 'The AI could not transform the age. Please try a different image.',
+            restorationFailed: 'The AI could not restore the photo. Please try a different one.',
         },
         unknown: 'An unknown error occurred.',
     },
@@ -300,6 +302,13 @@ export const en = {
                 Senior: 'Senior',
                 Elderly: 'Elderly',
             }
-        }
+        },
+        photoRestoration: {
+            label: 'Upload Old/Damaged Photo',
+            description: 'Repair scratches, color fading, and damage.',
+            buttonText: 'Restore Photo',
+            buttonLoadingText: 'Restoring...',
+            error: 'Please upload a photo to restore.',
+        },
     },
 };

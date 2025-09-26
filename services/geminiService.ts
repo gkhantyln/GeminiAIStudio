@@ -425,3 +425,19 @@ export const transformAge = async (imageBase64: string, targetAge: string): Prom
 
     return callGemini([imagePart, textPart]);
 };
+
+export const restorePhoto = async (imageBase64: string): Promise<string | null> => {
+    const imagePart = fileToGenerativePart(imageBase64);
+    const textPart = {
+        text: `**Task: Expert Photo Restoration.**
+        Act as a world-class digital restoration artist. Your task is to restore the provided old and damaged photograph to its former glory with maximum realism.
+        **Key Restoration Steps:**
+        1.  **Damage Repair:** Meticulously identify and repair all physical damage, including scratches, tears, creases, stains, and water spots. The repairs must be seamless and undetectable.
+        2.  **Color Correction:** Correct color fading, yellowing, and color casts. Restore a natural and balanced color palette appropriate for the era of the photograph. If it's black and white, enhance its tonal range. Do not colorize B&W photos unless they were clearly faded from color.
+        3.  **Detail & Sharpness Enhancement:** Subtly enhance the sharpness and bring out lost details in faces, clothing, and the background. Avoid over-sharpening that creates an artificial look.
+        4.  **Noise & Grain Reduction:** Reduce film grain and digital noise that obscures details, but retain a natural photographic texture.
+        **Constraint:** Preserve the original composition, subjects, and authenticity of the photograph. The goal is restoration, not recreation. The result should look like a well-preserved original print.
+        **Output:** Provide only the final, restored image.`
+    };
+    return callGemini([imagePart, textPart]);
+};

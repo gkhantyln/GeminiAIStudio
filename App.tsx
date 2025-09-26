@@ -21,6 +21,7 @@ import ImageMixerView from './views/ImageMixerView';
 import VideoGeneratorView from './views/VideoGeneratorView';
 import PromptGeneratorView from './views/PromptGeneratorView';
 import AgeYouthFilterView from './views/AgeYouthFilterView';
+import PhotoRestorationView from './views/PhotoRestorationView';
 import { useTranslation } from './context/LanguageContext';
 
 const App: React.FC = () => {
@@ -101,6 +102,8 @@ const App: React.FC = () => {
         return <VideoGeneratorView />;
       case 'age-youth-filter':
         return <AgeYouthFilterView />;
+      case 'photo-restoration':
+        return <PhotoRestorationView />;
       default:
         return <CategorySelector onSelectTool={setActiveTool} />;
     }
