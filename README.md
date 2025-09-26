@@ -8,7 +8,7 @@ Uygulama, Türkçe ve İngilizce dil desteği sunmaktadır.
 
 ## ✨ Özellikler
 
-Bu uygulama, her biri belirli bir görev için özelleştirilmiş 15 farklı yapay zeka aracı sunar:
+Bu uygulama, her biri belirli bir görev için özelleştirilmiş 16 farklı yapay zeka aracı sunar:
 
 -   **🎬 Yapay Zeka Video Oluşturucu:** Metin açıklamaları ve isteğe bağlı başlangıç görselleriyle kısa videolar oluşturun. Farklı en-boy oranları (16:9, 9:16 vb.) desteklenir.
 -   **🎭 Yüz Değiştirme (Face Swap):** İki görüntü arasında yüzleri kusursuz bir şekilde değiştirin.
@@ -25,6 +25,7 @@ Bu uygulama, her biri belirli bir görev için özelleştirilmiş 15 farklı yap
 -   **👨‍💼 Yapay Zeka Vesikalık (AI Headshot Generator):** Sıradan bir selfie'yi profesyonel bir vesikalık fotoğrafa dönüştürün.
 -   **📦 Yapay Zeka Ürün Fotoğrafçısı (AI Product Photographer):** Ürününüzün fotoğrafını yükleyin ve onu stüdyo kalitesinde, dikkat çekici bir arka plana yerleştirin.
 -   **✍️ Özel Düzenleme (Custom Edit):** Ne istediğinizi kelimelerle anlatın, yapay zeka sizin için düzenlemeyi yapsın.
+-   **📝 Prompt Oluşturucu (Prompt Generator):** Yüklediğiniz bir görüntüden yola çıkarak onu yeniden oluşturabilecek detaylı bir metin istemi (prompt) oluşturun.
 
 ## 🛠️ Kullanılan Teknolojiler
 
