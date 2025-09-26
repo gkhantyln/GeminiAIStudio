@@ -15,6 +15,7 @@ import { HeadshotIcon } from './icons/HeadshotIcon';
 import { ProductIcon } from './icons/ProductIcon';
 import { MixerIcon } from './icons/MixerIcon';
 import { VideoIcon } from './icons/VideoIcon';
+import { PromptIcon } from './icons/PromptIcon';
 import { useTranslation } from '../context/LanguageContext';
 
 export interface Tool {
@@ -39,13 +40,14 @@ const toolIcons: { [key: string]: React.ReactNode } = {
     'headshot-generator': <HeadshotIcon className="w-10 h-10 mb-4 text-indigo-400" />,
     'product-photographer': <ProductIcon className="w-10 h-10 mb-4 text-indigo-400" />,
     'custom-edit': <WandIcon className="w-10 h-10 mb-4 text-indigo-400" />,
+    'prompt-generator': <PromptIcon className="w-10 h-10 mb-4 text-indigo-400" />,
     'video-generator': <VideoIcon className="w-10 h-10 mb-4 text-indigo-400" />,
 };
 
 const toolIds = [
     'face-swap', 'image-mixer', 'virtual-try-on', 'image-enhancer', 'colorize-photo', 'magic-eraser', 
     'magic-expand', 'outfit-changer', 'outfit-transfer', 'background-swap', 'interior-designer', 
-    'headshot-generator', 'product-photographer', 'custom-edit', 'video-generator'
+    'headshot-generator', 'product-photographer', 'custom-edit', 'prompt-generator', 'video-generator'
 ];
 
 interface CategorySelectorProps {

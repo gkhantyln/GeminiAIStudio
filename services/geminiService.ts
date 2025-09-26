@@ -12,6 +12,7 @@ const getAiClient = () => {
 
 const imageModel = 'gemini-2.5-flash-image-preview';
 const videoModel = 'veo-2.0-generate-001';
+const textAndVisionModel = 'gemini-2.5-flash';
 
 const fileToGenerativePart = (base64Data: string) => {
   const match = base64Data.match(/^data:(image\/(?:jpeg|png|webp));base64,(.*)$/);
@@ -346,4 +347,45 @@ You will be given multiple images, each containing one or more subjects, and a t
 
   const allParts = [...imageParts, textPart];
   return callGemini(allParts);
+};
+
+export const generatePromptFromImage = async (imageBase64: string, detailLevel: string): Promise<string | null> => {
+  const ai = getAiClient();
+  const imagePart = fileToGenerativePart(imageBase64);
+
+  const detailText = {
+    Simple: "Generate a simple, one-sentence descriptive prompt.",
+    Medium: "Generate a medium-length, detailed descriptive prompt in a paragraph.",
+    Advanced: "Generate an advanced, highly detailed prompt, including style, composition, lighting, and mood, suitable for an AI image generator."
+  };
+
+  const textPart = {
+    text: `Analyze the image provided. ${detailText[detailLevel as keyof typeof detailText]} The prompt should be able to recreate a similar image. Provide the prompt in both English and Turkish. You MUST respond with a valid JSON object ONLY, with the format: {"english": "...", "turkish": "..."}. Do not add any other text or markdown formatting.`
+  };
+  
+  try {
+    const response = await ai.models.generateContent({
+      model: textAndVisionModel,
+      contents: { parts: [imagePart, textPart] },
+      config: {
+        responseMimeType: "application/json",
+      },
+    });
+
+    return response.text;
+  } catch (error: any) {
+    console.error("Error communicating with Gemini API for prompt generation:", error);
+    const errorString = JSON.stringify(error);
+
+    if (errorString.includes('API key not valid')) {
+        localStorage.removeItem('gemini-api-key');
+        localStorage.removeItem('user-id');
+        window.location.reload();
+        throw new Error("Your API Key is not valid. Please log in again.");
+    }
+    if (errorString.includes('exceeded your current quota') || errorString.includes('RESOURCE_EXHAUSTED')) {
+        throw new Error("QUOTA_EXCEEDED");
+    }
+    throw new Error("Could not communicate with the Gemini API.");
+  }
 };
